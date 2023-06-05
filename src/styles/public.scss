@@ -42,7 +42,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  @extend .cm-full !optional;
+  @extend .full ;
 }
 
 .position-center {
@@ -113,7 +113,7 @@
 
 // 副级文本
 .text-secondary {
-  @extend .cm-color-info !optional;
+  @extend .color-info ;
   font-size: 0.9em;
 }
 
@@ -186,84 +186,84 @@
 }
 
 .flex-auto {
-  @extend .cm-flex !optional;
-  @extend .cm-full-height !optional;
+  @extend .flex;
+  @extend .full-height ;
   
   &__content {
-    @extend .cm-flex-1 !optional;
-    @extend .cm-overflow-hidden !optional;
-    @extend .cm-full-height !optional;
+    @extend .flex-1 ;
+    @extend .overflow-hidden ;
+    @extend .full-height ;
   }
   
   &__fixed {
-    @extend .cm-flex-none !optional;
+    @extend .flex-none ;
   }
 }
 
 .flex-start {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
 
 // 上下左右居中
 .flex-center {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: center;
   justify-content: center;
 }
 
 // 上下居中，左右居左
 .flex-center-vertical {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: center;
   justify-content: flex-start;
 }
 
 // 上下居中，左右居右
 .flex-center-vertical-end {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: center;
   justify-content: flex-end;
 }
 
 // 左右居中，上下居上
 .flex-center-horizontal {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: flex-start;
   justify-content: center;
 }
 
 // 左右居中，上下居下
 .flex-center-horizontal-end {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: flex-end;
   justify-content: center;
 }
 
 // 左右拉开，上下居中
 .flex-space-between {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: center;
   justify-content: space-between;
 }
 
 // 左右拉伸，上下居中
 .flex-space-around {
-  @extend .cm-flex !optional;
+  @extend .flex;
   align-items: center;
   justify-content: space-around;
 }
 
 // 换行
 .flex-wrap {
-  @extend .cm-flex !optional;
+  @extend .flex;
   flex-wrap: wrap;
 }
 
 // 垂直布局
 .flex-column {
-  @extend .cm-flex !optional;
+  @extend .flex;
   flex-direction: column;
 }
 
