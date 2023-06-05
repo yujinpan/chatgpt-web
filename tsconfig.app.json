@@ -1,0 +1,15 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["src/**/__tests__/*", "src/**/*.spec.*"],
+  "compilerOptions": {
+    "strict": false,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "experimentalDecorators": true,
+    "moduleResolution": "Node"
+  }
+}
