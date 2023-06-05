@@ -1,0 +1,357 @@
+@use 'sass:map';
+@use './common-variables' as *;
+@use 'element-plus/theme-chalk/src/common/var' as common;
+@use 'element-plus/theme-chalk/src/dark/var' as *;
+
+// 点击样式
+.pointer {
+  transition: $transition-base;
+  cursor: pointer;
+  opacity: 0.9;
+  
+  &:focus,
+  &:hover {
+    opacity: 0.75;
+  }
+  
+  &:active {
+    opacity: 1;
+  }
+}
+
+// 触发 BFC
+.overflow-hidden {
+  overflow: hidden;
+}
+
+// 常用布局排版
+.full {
+  width: 100%;
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.position-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  @extend .cm-full !optional;
+}
+
+.position-center {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.transform-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wrap {
+  white-space: normal;
+  word-break: break-all;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+// 常用文字排版
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; // 超过 2 行显示省略号
+  overflow: hidden;
+}
+
+// 标题文本
+.text-main {
+  font-size: 1.1em;
+}
+
+// 常规
+.text-normal {
+  font-weight: normal;
+}
+
+// 粗体
+.text-bold {
+  font-weight: bold;
+}
+
+// 副级文本
+.text-secondary {
+  @extend .cm-color-info !optional;
+  font-size: 0.9em;
+}
+
+// 颜色
+.color-primary {
+  color: common.$color-primary;
+}
+
+.color-info {
+  color: common.$color-info;
+}
+
+.color-warning {
+  color: common.$color-warning;
+}
+
+.color-success {
+  color: common.$color-success;
+}
+
+.color-danger {
+  color: common.$color-danger;
+}
+
+.color-placeholder {
+  color: $fill-color-base;
+}
+
+// 常用列表排版
+.list-unstyled {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+// 滚动条
+.scroll {
+  overflow: auto;
+}
+
+.scroll-x {
+  overflow-x: auto;
+}
+
+.scroll-y {
+  overflow-y: auto;
+}
+
+.scrollbar-default {
+  // firefox
+  scrollbar-width: thin;
+  
+  // chrome
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+  
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+  }
+}
+
+// flex 布局
+.flex {
+  display: flex;
+}
+
+.flex-auto {
+  @extend .cm-flex !optional;
+  @extend .cm-full-height !optional;
+  
+  &__content {
+    @extend .cm-flex-1 !optional;
+    @extend .cm-overflow-hidden !optional;
+    @extend .cm-full-height !optional;
+  }
+  
+  &__fixed {
+    @extend .cm-flex-none !optional;
+  }
+}
+
+.flex-start {
+  @extend .cm-flex !optional;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+// 上下左右居中
+.flex-center {
+  @extend .cm-flex !optional;
+  align-items: center;
+  justify-content: center;
+}
+
+// 上下居中，左右居左
+.flex-center-vertical {
+  @extend .cm-flex !optional;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+// 上下居中，左右居右
+.flex-center-vertical-end {
+  @extend .cm-flex !optional;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+// 左右居中，上下居上
+.flex-center-horizontal {
+  @extend .cm-flex !optional;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+// 左右居中，上下居下
+.flex-center-horizontal-end {
+  @extend .cm-flex !optional;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+// 左右拉开，上下居中
+.flex-space-between {
+  @extend .cm-flex !optional;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// 左右拉伸，上下居中
+.flex-space-around {
+  @extend .cm-flex !optional;
+  align-items: center;
+  justify-content: space-around;
+}
+
+// 换行
+.flex-wrap {
+  @extend .cm-flex !optional;
+  flex-wrap: wrap;
+}
+
+// 垂直布局
+.flex-column {
+  @extend .cm-flex !optional;
+  flex-direction: column;
+}
+
+// 行内布局
+.flex-inline {
+  display: inline-flex;
+}
+
+// 自动撑开
+.flex-1,
+.flex-spacer {
+  flex-grow: 1;
+}
+
+// 不参与弹性布局
+.flex-none {
+  flex: none;
+}
+
+// 边框
+.border-base {
+  border: $border-color-base;
+}
+
+.border-radius-base {
+  border-radius: map.get(common.$border-radius, 'base');
+}
+
+// 背景
+.bg-base {
+  background-color: map.get($bg-color, '');
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+// 常用阴影效果
+.box-shadow-base {
+  box-shadow: map.get($box-shadow, '');
+}
+
+// 过渡效果
+.transition-base {
+  transition: $transition-base;
+}
+
+// 常用 margin 距离
+// 基准单位 => base: 10px | medium: 20px | large: 30px
+// class => .margin-base = { margin: 10px } （medium | large 同理）
+// class => .padding-base = { padding: 10px } （medium | large 同理）
+// class => .margin-left-base = { margin-left: 10px } （medium | large 同理）
+// class => .padding-left-base = { padding-left: 10px } （medium | large 同理）
+@each $type in margin, padding {
+  .#{$type}-none {
+    #{$type}: 0;
+  }
+  .#{$type}-auto {
+    #{$type}: auto;
+  }
+  .#{$type}-base {
+    #{$type}: $spacing-base;
+  }
+  .#{$type}-medium {
+    #{$type}: $spacing-medium;
+  }
+  .#{$type}-large {
+    #{$type}: $spacing-large;
+  }
+  @each $direction in top, right, bottom, left {
+    .#{$type}-#{$direction}-none {
+      #{$type}-#{$direction}: 0;
+    }
+    .#{$type}-#{$direction}-auto {
+      #{$type}-#{$direction}: auto;
+    }
+    .#{$type}-#{$direction}-base {
+      #{$type}-#{$direction}: $spacing-base;
+    }
+    .#{$type}-#{$direction}-medium {
+      #{$type}-#{$direction}: $spacing-medium;
+    }
+    .#{$type}-#{$direction}-large {
+      #{$type}-#{$direction}: $spacing-large;
+    }
+  }
+}

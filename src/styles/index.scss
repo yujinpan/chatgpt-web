@@ -1,0 +1,21 @@
+@use 'sass:map';
+
+// 先引入自定义主题样式
+@use './common-variables.scss' as *;
+@use 'element-plus/theme-chalk/src/common/var' as *;
+@use "./ep";
+@use "base";
+@use "public";
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: auto;
+  color: $color-white;
+}
