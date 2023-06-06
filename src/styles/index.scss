@@ -1,18 +1,17 @@
-@use 'sass:map';
-
-// 先引入自定义主题样式
 @use './common-variables.scss' as *;
-@use 'element-plus/theme-chalk/src/dark/var' as *;
-@use "./ep";
 @use "base";
 @use "public";
 
+html.dark {
+  color-scheme: dark;
+}
+
 body {
-  font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: "JetBrains Mono", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: auto;
-  color: map.get($text-color, 'primary');
-  background-color: map.get($bg-color, 'overlay');
+  color: $font-color;
+  background-color: $bg-color;
   font-size: 14px;
 }

@@ -1,7 +1,5 @@
 @use 'sass:map';
 @use './common-variables' as *;
-@use 'element-plus/theme-chalk/src/common/var' as common;
-@use 'element-plus/theme-chalk/src/dark/var' as *;
 
 // 点击样式
 .pointer {
@@ -113,71 +111,14 @@
 
 // 副级文本
 .text-secondary {
-  @extend .color-info ;
+  color: $font-color-secondary;
   font-size: 0.9em;
-}
-
-// 颜色
-.color-primary {
-  color: common.$color-primary;
-}
-
-.color-info {
-  color: common.$color-info;
-}
-
-.color-warning {
-  color: common.$color-warning;
-}
-
-.color-success {
-  color: common.$color-success;
-}
-
-.color-danger {
-  color: common.$color-danger;
-}
-
-.color-placeholder {
-  color: $fill-color-base;
 }
 
 // 常用列表排版
 .list-unstyled {
   list-style-type: none;
   padding-left: 0;
-}
-
-// 滚动条
-.scroll {
-  overflow: auto;
-}
-
-.scroll-x {
-  overflow-x: auto;
-}
-
-.scroll-y {
-  overflow-y: auto;
-}
-
-.scrollbar-default {
-  // firefox
-  scrollbar-width: thin;
-  
-  // chrome
-  &::-webkit-scrollbar-track-piece {
-    background: #d3dce6;
-  }
-  
-  &::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: #99a9bf;
-  }
 }
 
 // flex 布局
@@ -281,38 +222,6 @@
 // 不参与弹性布局
 .flex-none {
   flex: none;
-}
-
-// 边框
-.border-base {
-  border: $border-color-base;
-}
-
-.border-radius-base {
-  border-radius: map.get(common.$border-radius, 'base');
-}
-
-// 背景
-.bg-base {
-  background-color: map.get($bg-color, '');
-}
-
-.bg-white {
-  background-color: white;
-}
-
-.bg-transparent {
-  background-color: transparent;
-}
-
-// 常用阴影效果
-.box-shadow-base {
-  box-shadow: map.get($box-shadow, '');
-}
-
-// 过渡效果
-.transition-base {
-  transition: $transition-base;
 }
 
 // 常用 margin 距离

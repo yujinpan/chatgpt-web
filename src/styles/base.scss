@@ -36,3 +36,9 @@ a {
 div:focus {
   outline: none;
 }
+
+input,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}

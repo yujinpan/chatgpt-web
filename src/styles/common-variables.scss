@@ -1,14 +1,18 @@
-@use 'element-plus/theme-chalk/src/common/var' as *;
+$font-color: #ddd;
+$font-color-secondary: #888;
+$font-size: 14px;
 
-// 字体颜色
-$font-color: $color-white !default;
-$font-size: 14px !default;
+$spacing-base: 8px;
+$spacing-medium: 16px;
+$spacing-large: 24px;
 
-// 间距大小
-$spacing-base: 8px !default;
-$spacing-medium: 16px !default;
-$spacing-large: 24px !default;
+$transition-base: all 0.3s;
+$transition-base-ease-out: all 0.3s ease-out;
 
-// 过渡效果
-$transition-base: all 0.3s !default;
-$transition-base-ease-out: all 0.3s ease-out !default;
+$border-radius: 4px;
+$border-color: rgb(85 85 85);
+
+$bg-color: rgb(43 43 43);
+$bg-color-overlay: #3c3f41;
+
+$color-primary: rgb(120 120 120);

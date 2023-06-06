@@ -1,9 +1,6 @@
 <template>
   <div class="app">
-    <div
-      class="content"
-      :style="{ paddingBottom: contentPaddingBottom + 'px' }"
-    >
+    <div class="content">
       <ul v-if="messages.length" class="list-unstyled flex-column">
         <li
           v-for="(msg, index) in messages"
@@ -15,36 +12,25 @@
       </ul>
       <p v-else class="text-secondary text-center">Talk about your problem.</p>
     </div>
-    <div ref="inputElem" class="input">
-      <ElInput
-        ref="elInput"
-        v-model="input"
-        class="full"
-        type="textarea"
-        placeholder="typing..."
-        resize="none"
-        autofocus
-        :autosize="{ minRows: 3, maxRows: 6 }"
-        @keydown.enter.prevent="enter"
-      />
-    </div>
+    <textarea
+      ref="textarea"
+      v-model="input"
+      class="input"
+      placeholder="typing..."
+      autofocus
+      @keydown.enter.prevent="enter"
+    />
   </div>
 </template>
 
 <script lang="tsx" setup>
-import { ElInput } from 'element-plus';
-import throttle from 'lodash/throttle';
-import { onMounted, ref, watch } from 'vue';
-
-// import { chatCompletions } from './api';
+import { ref } from 'vue';
 
 const input = ref('');
-const elInput = ref<typeof ElInput>();
 const messages = ref<string[]>([]);
 const submit = () => {
   messages.value.push(input.value);
-  elInput.value.clear();
-  elInput.value.resizeTextarea();
+  input.value = '';
 };
 const enter = (e: KeyboardEvent) => {
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
@@ -53,34 +39,20 @@ const enter = (e: KeyboardEvent) => {
     submit();
   }
 };
-
-const inputElem = ref<HTMLElement>();
-const contentPaddingBottom = ref(0);
-const updateContentPaddingBottom = throttle(() => {
-  const newVal = inputElem.value.clientHeight + 16;
-  if (contentPaddingBottom.value === newVal) return;
-
-  contentPaddingBottom.value = newVal;
-}, 300);
-watch(() => input.value, updateContentPaddingBottom);
-
-onMounted(() => {
-  setTimeout(() => {
-    updateContentPaddingBottom();
-  });
-});
 </script>
 
 <style lang="scss" scoped>
 @use '@/styles/common-variables' as *;
 
 .app {
+  $inputHeight: 120px;
   .content {
-    padding: $spacing-medium;
+    padding: $spacing-medium $spacing-medium $inputHeight + $spacing-medium
+      $spacing-medium;
     > ul {
       > li {
-        background-color: rgba(255, 255, 255, 0.08);
-        border-radius: var(--el-border-radius-base);
+        background-color: $bg-color-overlay;
+        border-radius: $border-radius;
         padding: $spacing-base;
         display: inline-block;
         max-width: 60%;
@@ -101,15 +73,18 @@ onMounted(() => {
     bottom: 0;
     z-index: 1;
     width: 100%;
-    background-color: var(--el-bg-color-overlay);
-    border-top: 1px solid var(--el-border-color);
+    height: $inputHeight;
+    background-color: $bg-color;
+    border: 0;
+    border-top: 1px solid $border-color;
+    padding: $spacing-medium;
+    resize: none;
+    display: block;
+    border-radius: 0;
+    outline: 0;
 
-    .el-textarea {
-      :deep(.el-textarea__inner) {
-        padding: $spacing-medium;
-        box-shadow: none;
-        border-radius: 0;
-      }
+    &:focus {
+      border-top: 1px solid $color-primary;
     }
   }
 }
