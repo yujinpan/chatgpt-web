@@ -1,43 +1,59 @@
 <template>
   <div class="app">
-    <div class="content">
-      <ul v-if="messages.length" class="list-unstyled flex-column">
-        <li
-          v-for="(msg, index) in messages"
-          :key="index"
-          :class="{ 'is-right': msg.isRight }"
-        >
-          {{ msg }}
-        </li>
-      </ul>
-      <p v-else class="text-secondary text-center">Talk about your problem.</p>
-    </div>
-    <textarea
-      ref="textarea"
-      v-model="input"
-      class="input"
-      placeholder="typing..."
-      autofocus
-      @keydown.enter.prevent="enter"
-    />
+    <ChatMessages ref="contentElem" :data="messages" :loading="loading" />
+    <ChatInput ref="chatInput" @submit="submit" :disabled="loading" />
   </div>
 </template>
 
 <script lang="tsx" setup>
-import { ref } from 'vue';
+import debounce from 'lodash/debounce';
+import { nextTick, ref, watch } from 'vue';
 
-const input = ref('');
-const messages = ref<string[]>([]);
-const submit = () => {
-  messages.value.push(input.value);
-  input.value = '';
-};
-const enter = (e: KeyboardEvent) => {
-  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
-    input.value += '\n';
-  } else {
-    submit();
-  }
+import ChatInput from './ChatInput.vue';
+import ChatMessages from './ChatMessages.vue';
+import { chatCompletions } from './api';
+
+const contentElem = ref<HTMLElement>();
+const chatInput = ref<ChatInput>();
+
+const messages = ref([
+  {
+    role: 'bot',
+    message: 'Hey.',
+  },
+]);
+const loading = ref(false);
+
+const updateScroll = debounce(async () => {
+  await nextTick(() => {
+    document.scrollingElement.scrollTop =
+      document.body.clientHeight -
+      (document.documentElement.clientHeight -
+        chatInput.value.$el.clientHeight);
+  });
+}, 100);
+
+watch([() => messages.value, () => loading.value], updateScroll);
+
+const submit = async (msg: string) => {
+  const data = {
+    role: 'user',
+    message: msg,
+  };
+
+  messages.value.push(data);
+
+  loading.value = true;
+  await chatCompletions(data.role, data.message)
+    .then(
+      (result) => {
+        messages.value.push({ role: 'bot', message: '' });
+      },
+      (e) => {
+        messages.value.push({ role: 'bot', message: `Error: ${e}` });
+      },
+    )
+    .finally(() => (loading.value = false));
 };
 </script>
 
@@ -46,46 +62,13 @@ const enter = (e: KeyboardEvent) => {
 
 .app {
   $inputHeight: 120px;
-  .content {
-    padding: $spacing-medium $spacing-medium $inputHeight + $spacing-medium
-      $spacing-medium;
-    > ul {
-      > li {
-        background-color: $bg-color-overlay;
-        border-radius: $border-radius;
-        padding: $spacing-base;
-        display: inline-block;
-        max-width: 60%;
-        word-wrap: break-word;
-        + li {
-          margin-top: $spacing-base;
-        }
 
-        align-self: flex-start;
-        &.is-right {
-          align-self: flex-end;
-        }
-      }
-    }
+  .chat-messages {
+    padding-bottom: $inputHeight + $spacing-medium;
   }
-  .input {
-    position: fixed;
-    bottom: 0;
-    z-index: 1;
-    width: 100%;
-    height: $inputHeight;
-    background-color: $bg-color;
-    border: 0;
-    border-top: 1px solid $border-color;
-    padding: $spacing-medium;
-    resize: none;
-    display: block;
-    border-radius: 0;
-    outline: 0;
 
-    &:focus {
-      border-top: 1px solid $color-primary;
-    }
+  .chat-input {
+    height: $inputHeight;
   }
 }
 </style>
