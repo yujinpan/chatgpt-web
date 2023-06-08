@@ -9,9 +9,9 @@
 import debounce from 'lodash/debounce';
 import { nextTick, ref, watch } from 'vue';
 
-import ChatInput from './ChatInput.vue';
-import ChatMessages from './ChatMessages.vue';
 import { chatCompletions } from './api';
+import ChatInput from './components/ChatInput.vue';
+import ChatMessages from './components/ChatMessages.vue';
 
 const contentElem = ref<HTMLElement>();
 const chatInput = ref<ChatInput>();
