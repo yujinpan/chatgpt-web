@@ -3,7 +3,7 @@
     <li
       v-for="(msg, index) in data"
       :key="index"
-      :class="{ 'is-right': msg.role === 'user' }"
+      :class="{ 'is-right': msg.isUser }"
     >
       {{ msg.message }}
     </li>
@@ -14,10 +14,12 @@
 </template>
 
 <script setup lang="tsx">
+import type { ChatData } from '../types';
+
 import LoadingDot from './LoadingDot';
 
 defineProps<{
-  data: { role: string; message: string }[];
+  data: ChatData[];
   loading: boolean;
 }>();
 </script>
