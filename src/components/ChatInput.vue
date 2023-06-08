@@ -45,7 +45,7 @@ const enter = (e: KeyboardEvent) => {
   z-index: 1;
   width: 100%;
   height: 100%;
-  background-color: $bg-color;
+  background-color: rgb(40 40 40);
   border: 0;
   border-top: 1px solid $border-color;
   padding: $spacing-medium;
