@@ -53,6 +53,7 @@ const enter = (e: KeyboardEvent) => {
   display: block;
   border-radius: 0;
   outline: 0;
+  font-size: 15px;
 
   &:focus {
     border-top: 1px solid $color-primary;
