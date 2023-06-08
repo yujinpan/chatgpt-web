@@ -21,10 +21,7 @@ request.interceptors.request.use((config) => {
 
 request.interceptors.response.use((res) => {
   if (res.status !== 200) {
-    const errMsg = res.data?.error?.message;
-    if (errMsg) {
-      return Promise.reject(errMsg);
-    }
+    return Promise.reject(res.data?.error?.message || res);
   }
 
   return res;
