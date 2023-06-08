@@ -5,6 +5,8 @@
     placeholder="typing..."
     autofocus
     @keydown.enter.prevent="enter"
+    @compositionstart="handleCompositionStart"
+    @compositionend="handleCompositionEnd"
   />
 </template>
 
@@ -17,13 +19,17 @@ const emit = defineEmits<{
   (event: 'submit', msg: string): void;
 }>();
 
+const isComposition = ref(false);
+const handleCompositionStart = () => (isComposition.value = true);
+const handleCompositionEnd = () => (isComposition.value = false);
+
 const input = ref('');
 const enter = (e: KeyboardEvent) => {
-  if (props.disabled) return;
+  if (props.disabled || isComposition.value) return;
 
   if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
     input.value += '\n';
-  } else {
+  } else if (input.value.trim()) {
     emit('submit', input.value);
     input.value = '';
   }
