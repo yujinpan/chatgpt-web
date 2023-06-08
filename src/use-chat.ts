@@ -6,15 +6,15 @@ import type { ChatData } from './types';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { validateAuthKey } from './auth';
+import { validateAuthKey, validateLocalAuthKey } from './auth';
+import { appStore } from './store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
-  const role = generateRole();
+  const name = generateName();
   const messages = ref<ChatData[]>([
     {
-      role,
       message: validateAuthKey()
-        ? 'Hey.'
+        ? `Welcome to use ${appStore.model}.`
         : 'Please enter your authentication key.',
     },
   ]);
@@ -22,20 +22,15 @@ export function useChat(chatInput: Ref<ChatInput>) {
 
   const sendMsg = (msg: string) => {
     messages.value.push({
-      role,
       message: msg,
       isUser: true,
     });
 
     loading.value = true;
-    return chatCompletions(role, msg)
+    return requestMsg(name, msg)
       .then(
-        (result) =>
-          messages.value.push({
-            role,
-            message: result.data.choices[0]?.message.content,
-          }),
-        (e) => messages.value.push({ role, message: `Error: ${e}` }),
+        (message) => messages.value.push({ message }),
+        (error) => messages.value.push({ message: error }),
       )
       .finally(() => (loading.value = false));
   };
@@ -54,8 +49,26 @@ export function useChat(chatInput: Ref<ChatInput>) {
   };
 }
 
-function generateRole() {
-  return `No#${Date.now() + (Math.random() * 1e6).toFixed(0)}`;
+function requestMsg(name: string, msg: string): Promise<string> {
+  if (!validateLocalAuthKey()) {
+    if (!validateAuthKey(msg)) {
+      return Promise.reject('Authentication key invalid.');
+    } else {
+      return Promise.resolve(`Welcome to use ${appStore.model}.`);
+    }
+  }
+
+  return chatCompletions({
+    model: appStore.model,
+    messages: [{ role: 'user', name, content: msg }],
+  }).then(
+    (res) => res.data.choices[0]?.message.content,
+    (e) => `Error: ${e}`,
+  );
+}
+
+function generateName() {
+  return `No_${Date.now() + (Math.random() * 1e6).toFixed(0)}`;
 }
 
 function scrollToBottom(bottomHeight: number) {

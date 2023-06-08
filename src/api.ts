@@ -1,6 +1,6 @@
 import request from '@/request';
 
-export function chatCompletions(role: string, content: string) {
+export function chatCompletions(data) {
   return request.post<{
     id: string;
     object: 'chat.completion';
@@ -18,8 +18,5 @@ export function chatCompletions(role: string, content: string) {
       completion_tokens: number;
       total_tokens: number;
     };
-  }>(`/chatgpt`, {
-    model: 'gpt-3.5-turbo',
-    messages: [{ role, content }],
-  });
+  }>(`/chatgpt`, data);
 }
