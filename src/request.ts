@@ -26,6 +26,8 @@ request.interceptors.response.use((res) => {
       return Promise.reject(errMsg);
     }
   }
+
+  return res;
 });
 
 export default request;
