@@ -7,7 +7,7 @@
     @keydown.enter.prevent="enter"
     @compositionstart="handleCompositionStart"
     @compositionend="handleCompositionEnd"
-    enterkeyhint="enter"
+    enterkeyhint="done"
   />
 </template>
 
