@@ -5,7 +5,7 @@
       :key="index"
       :class="{ 'is-right': msg.isUser }"
     >
-      {{ msg.message }}
+      <MarkdownMsg :msg="msg.message" />
     </li>
     <li v-if="loading">
       <LoadingDot />
@@ -17,6 +17,7 @@
 import type { ChatData } from '../types';
 
 import LoadingDot from './LoadingDot';
+import MarkdownMsg from './MarkdownMsg.vue';
 
 defineProps<{
   data: ChatData[];
@@ -30,9 +31,6 @@ defineProps<{
 .chat-messages.list-unstyled {
   padding: $spacing-medium;
   > li {
-    background-color: $bg-color-overlay;
-    border-radius: $border-radius;
-    padding: $spacing-base;
     display: inline-block;
     max-width: 60%;
     word-wrap: break-word;
