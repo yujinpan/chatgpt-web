@@ -21,7 +21,7 @@ const { messages, sendMsg, loading } = useChat(chatInput);
 @use '@/styles/common-variables' as *;
 
 .app {
-  $inputHeight: 120px;
+  $inputHeight: 90px;
   $maxWidth: 870px;
 
   background-color: $bg-color;

@@ -32,7 +32,7 @@ defineProps<{
   padding: $spacing-medium;
   > li {
     display: inline-block;
-    max-width: 60%;
+    max-width: 80%;
     word-wrap: break-word;
     + li {
       margin-top: $spacing-base;
