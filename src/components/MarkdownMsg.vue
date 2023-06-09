@@ -1,5 +1,5 @@
 <template>
-  <div v-if="content" class="markdown-body" v-html="content"></div>
+  <div v-if="markdownHtml" class="markdown-body" v-html="markdownHtml"></div>
   <LoadingDot v-else />
 </template>
 
@@ -8,10 +8,10 @@ import LoadingDot from './LoadingDot';
 import { useMarkdown } from './use-markdown';
 
 const props = defineProps<{
-  msg: string;
+  content: string;
 }>();
 
-const { content } = useMarkdown(props);
+const { markdownHtml } = useMarkdown(props);
 </script>
 
 <style lang="scss">

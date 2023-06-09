@@ -3,9 +3,9 @@
     <li
       v-for="(msg, index) in data"
       :key="index"
-      :class="{ 'is-right': msg.isUser }"
+      :class="{ 'is-right': msg.role === 'user' }"
     >
-      <MarkdownMsg :msg="msg.message" />
+      <MarkdownMsg :content="msg.content" />
     </li>
     <li v-if="loading">
       <LoadingDot />

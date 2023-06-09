@@ -1,4 +1,4 @@
 export type ChatData = {
-  message: string;
-  isUser?: boolean;
+  role?: 'system' | 'user' | 'assistant';
+  content: string;
 };

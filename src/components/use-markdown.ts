@@ -2,8 +2,8 @@ import { onMounted, ref } from 'vue';
 
 import { removeAttr } from '../utils/format';
 
-export function useMarkdown(props: { msg: string }) {
-  const content = ref('');
+export function useMarkdown(props: { content: string }) {
+  const markdownHtml = ref('');
 
   const renderMarkdown = (highlight?) => {
     const md = window.markdownit({
@@ -12,11 +12,11 @@ export function useMarkdown(props: { msg: string }) {
       highlight,
     });
 
-    content.value = md.render(props.msg);
+    markdownHtml.value = md.render(props.content);
   };
 
   onMounted(() => {
-    const langs = getLangs(props.msg);
+    const langs = getLangs(props.content);
 
     if (langs?.length) {
       highlightCode(langs).then(
@@ -29,7 +29,7 @@ export function useMarkdown(props: { msg: string }) {
   });
 
   return {
-    content,
+    markdownHtml,
   };
 }
 

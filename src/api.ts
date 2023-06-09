@@ -1,16 +1,15 @@
+import type { ChatData } from './types';
+
 import request from './utils/request';
 
-export function chatCompletions(data) {
+export function chatCompletions(data: { model: string; messages: ChatData[] }) {
   return request.post<{
     id: string;
     object: 'chat.completion';
     created: number;
     choices: {
       index: number;
-      message: {
-        role: number;
-        content: string;
-      };
+      message: ChatData;
       finish_reason: 'stop';
     }[];
     usage: {

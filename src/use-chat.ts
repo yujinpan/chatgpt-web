@@ -8,31 +8,38 @@ import type { Ref } from 'vue';
 import { chatCompletions } from './api';
 import { GPT_MODELS } from './config';
 import { validateAuthKey, validateLocalAuthKey } from './utils/auth';
+import { localDataMessages } from './utils/local-data';
 import { appStore } from './utils/store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
-  const name = generateName();
-  const messages = ref<ChatData[]>([
-    {
-      message: validateAuthKey()
-        ? generateStartMsg()
-        : 'Please enter your authentication key.',
-    },
-  ]);
+  const localData = localDataMessages.get();
+  const messages = ref<ChatData[]>(
+    localData?.length
+      ? localData
+      : [
+          {
+            content: validateAuthKey()
+              ? generateStartMsg()
+              : 'Please enter your authentication key.',
+          },
+        ],
+  );
   const loading = ref(false);
+
+  watch(
+    () => messages.value.length,
+    () => localDataMessages.set(messages.value),
+  );
 
   const sendMsg = (msg: string) => {
     messages.value.push({
-      message: msg,
-      isUser: true,
+      content: msg,
+      role: 'user',
     });
 
     loading.value = true;
-    return requestMsg(name, msg)
-      .then(
-        (message) => messages.value.push({ message }),
-        (error) => messages.value.push({ message: error }),
-      )
+    return requestChat(messages.value)
+      .then((data) => messages.value.push(data))
       .finally(() => (loading.value = false));
   };
 
@@ -50,8 +57,9 @@ export function useChat(chatInput: Ref<ChatInput>) {
   };
 }
 
-function requestMsg(name: string, msg: string): Promise<string> {
-  const interceptorsResult = useMsgInterceptors(msg, [
+function requestChat(chatData: ChatData[]): Promise<ChatData> {
+  const lastMsg = chatData[chatData.length - 1]?.content;
+  const interceptorsResult = useMsgInterceptors(lastMsg, [
     msgInterceptorValidate,
     msgInterceptorChangeModel,
   ]);
@@ -59,10 +67,10 @@ function requestMsg(name: string, msg: string): Promise<string> {
 
   return chatCompletions({
     model: appStore.model,
-    messages: [{ role: 'user', name, content: msg }],
+    messages: chatData.filter((item) => !!item.role),
   }).then(
-    (res) => res.data.choices[0]?.message.content,
-    (e) => `Error: ${e}`,
+    (res) => res.data.choices[0]?.message,
+    (e) => ({ content: `Error: ${e}` }),
   );
 }
 
@@ -96,10 +104,6 @@ function msgInterceptorChangeModel(msg: string) {
 
 function generateStartMsg() {
   return `Welcome to use ${appStore.model}.`;
-}
-
-function generateName() {
-  return `No_${Date.now() + (Math.random() * 1e6).toFixed(0)}`;
 }
 
 function scrollToBottom(bottomHeight: number) {
