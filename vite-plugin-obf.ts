@@ -7,6 +7,7 @@ const vitePluginObf = (options: { include: FilterPattern }): PluginOption => {
   return {
     name: 'obf',
     enforce: 'post',
+    apply: 'build',
     transform(src, id) {
       const filter = createFilter(options.include);
       if (filter(id)) {
