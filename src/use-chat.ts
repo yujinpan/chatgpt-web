@@ -6,9 +6,9 @@ import type { ChatData } from './types';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { validateAuthKey, validateLocalAuthKey } from './auth';
 import { GPT_MODELS } from './config';
-import { appStore } from './store';
+import { validateAuthKey, validateLocalAuthKey } from './utils/auth';
+import { appStore } from './utils/store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
   const name = generateName();

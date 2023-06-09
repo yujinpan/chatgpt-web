@@ -18,7 +18,7 @@ export default defineConfig({
     vue(),
     vueJsx(),
     vitePluginObf({
-      include: ['src/secret.ts', 'src/auth.ts'],
+      include: ['src/utils/secret.ts', 'src/utils/auth.ts'],
     }),
   ],
   server: {

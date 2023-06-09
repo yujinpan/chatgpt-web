@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { BASE_URL } from './config';
-import { getHeaders } from '@/secret';
+import { getHeaders } from './secret';
+import { BASE_URL } from '../config';
 
 const request = axios.create({
   baseURL: import.meta.env.DEV ? '/api' : BASE_URL,

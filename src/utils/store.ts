@@ -1,4 +1,4 @@
-import { GPT_MODELS } from './config';
+import { GPT_MODELS } from '../config';
 
 class AppStore {
   private _model = GPT_MODELS[0];
