@@ -22,13 +22,24 @@ const { messages, sendMsg, loading } = useChat(chatInput);
 
 .app {
   $inputHeight: 120px;
+  $maxWidth: 870px;
+
+  background-color: $bg-color;
+  position: relative;
+  max-width: $maxWidth;
+  min-height: calc(100vh);
+  margin: 0 auto;
 
   .chat-messages {
-    padding-bottom: $inputHeight + $spacing-medium;
+    padding-bottom: $inputHeight + $spacing-medium * 2;
   }
 
   .chat-input {
     height: $inputHeight;
+    position: fixed;
+    bottom: 0;
+    max-width: $maxWidth;
+    margin: 0 auto;
   }
 }
 </style>

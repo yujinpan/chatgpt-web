@@ -41,23 +41,20 @@ const enter = (e: KeyboardEvent) => {
 @use '@/styles/common-variables' as *;
 
 .chat-input {
-  position: fixed;
-  bottom: 0;
-  z-index: 1;
   width: 100%;
   height: 100%;
   background-color: rgb(40 40 40);
   border: 0;
   border-top: 1px solid $border-color;
+  border-radius: $border-radius $border-radius 0 0;
   padding: $spacing-medium;
   resize: none;
   display: block;
-  border-radius: 0;
   outline: 0;
   font-size: 15px;
 
   &:focus {
-    border-top: 1px solid $color-primary;
+    background-color: $bg-color-overlay;
   }
 }
 </style>
