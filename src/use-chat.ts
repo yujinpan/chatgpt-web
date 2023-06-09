@@ -69,7 +69,12 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
     msgInterceptorValidate,
     msgInterceptorChangeModel,
   ]);
-  if (interceptorsResult) return interceptorsResult;
+  if (interceptorsResult) {
+    return interceptorsResult.then(
+      (e) => ({ content: e }),
+      (e) => ({ content: e }),
+    );
+  }
 
   return chatCompletions({
     model: appStore.model,
@@ -84,7 +89,10 @@ interface MsgInterceptor {
   (msg: string): undefined | Promise<string>;
 }
 
-function useMsgInterceptors(msg: string, interceptors: MsgInterceptor[]) {
+function useMsgInterceptors(
+  msg: string,
+  interceptors: MsgInterceptor[],
+): Promise<string> | undefined {
   return interceptors.length
     ? interceptors[0](msg) || useMsgInterceptors(msg, interceptors.slice(1))
     : undefined;
