@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 
 import type ChatInput from './components/ChatInput.vue';
 import type { ChatData } from './types';
@@ -26,11 +26,6 @@ export function useChat(chatInput: Ref<ChatInput>) {
   );
   const loading = ref(false);
 
-  watch(
-    () => messages.value.length,
-    () => localDataMessages.set(messages.value),
-  );
-
   const sendMsg = (msg: string) => {
     messages.value.push({
       content: msg,
@@ -48,7 +43,18 @@ export function useChat(chatInput: Ref<ChatInput>) {
       scrollToBottom(chatInput.value.$el.clientHeight);
     });
   }, 100);
-  watch([() => messages.value, () => loading.value], updateScroll);
+
+  watch(
+    () => messages.value.length,
+    () => {
+      localDataMessages.set(messages.value);
+      updateScroll();
+    },
+  );
+
+  onMounted(() => {
+    updateScroll();
+  });
 
   return {
     messages,
