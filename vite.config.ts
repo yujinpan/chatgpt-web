@@ -5,6 +5,7 @@ import { resolveWithAlias } from 'path-ops';
 import { defineConfig } from 'vite';
 
 import pkg from './package.json';
+import vitePluginObf from './vite-plugin-obf';
 
 const alias = {
   '@': resolve('src'),
@@ -13,7 +14,13 @@ const alias = {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
-  plugins: [vue(), vueJsx()],
+  plugins: [
+    vue(),
+    vueJsx(),
+    vitePluginObf({
+      include: ['src/secret.ts', 'src/auth.ts'],
+    }),
+  ],
   server: {
     proxy: {
       '/api': {

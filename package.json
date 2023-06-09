@@ -5,12 +5,13 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "vite",
-    "build": "vite build && npm run zip",
+    "build": "npm run encrypt && vite build && npm run zip",
     "preview": "vite preview --port 4173",
     "test": "vitest --environment jsdom",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "zip": "fs-ops zip dist -o=dist/"
+    "zip": "fs-ops zip dist -o=dist/",
+    "encrypt": "node scripts/encrypt.js"
   },
   "dependencies": {
     "axios": "^1.4.0",
@@ -30,11 +31,13 @@
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.4.0",
+    "dotenv": "^16.1.4",
     "eslint": "8.40.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-vue": "^9.13.0",
     "fs-ops": "^1.0.6",
+    "javascript-obfuscator": "^4.0.2",
     "jsdom": "^22.0.0",
     "npm-run-all": "^4.1.5",
     "path-ops": "^1.0.0",
