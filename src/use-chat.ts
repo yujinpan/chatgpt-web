@@ -6,8 +6,13 @@ import type { ChatData } from './utils/chat-data';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { ChatRole, createChatData } from './utils/chat-data';
-import { COMMAND, getCommand } from './utils/command';
+import { validateLocalAuthKey } from './utils/auth';
+import {
+  ChatRole,
+  createChatData,
+  getChatAPIMessages,
+} from './utils/chat-data';
+import { COMMAND, getCommand, isCommand } from './utils/command';
 import { scrollToBottom } from './utils/dom';
 import {
   msgInterceptorCommand,
@@ -23,7 +28,7 @@ export function useChat(chatInput: Ref<ChatInput>) {
   const loading = ref(false);
 
   const sendMsg = (msg: string) => {
-    messages.value.push(createChatData(msg, ChatRole.USER));
+    messages.value.push(createChatData(msg, getRole(msg)));
 
     loading.value = true;
     return requestChat(messages.value)
@@ -69,17 +74,12 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
     msgInterceptorValidate,
   ]);
   if (interceptorsResult) {
-    return interceptorsResult.then(createChatData, createChatData);
+    return interceptorsResult;
   }
 
   return chatCompletions({
     model: appStore.model,
-    messages: chatData
-      .filter((item) => !!item.role)
-      .map((item) => ({
-        role: item.role,
-        content: item.content,
-      })),
+    messages: getChatAPIMessages(chatData),
   }).then(
     (res) => {
       const { role, content } = res.data.choices[0].message;
@@ -97,4 +97,12 @@ function initMessages(): ChatData[] {
         created: item.created || Date.now(),
       }))
     : [createChatData(generateStartMsg())];
+}
+
+function getRole(msg: string) {
+  return isCommand(msg)
+    ? ChatRole.COMMAND
+    : validateLocalAuthKey()
+    ? ChatRole.USER
+    : ChatRole.VISITOR;
 }

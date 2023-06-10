@@ -38,6 +38,10 @@ function handleChangeModel(model: GPT_MODEL) {
 }
 
 export function getCommand(msg: string): COMMAND {
-  const msgTrim = msg.trim();
-  return /^\/[\w-.]*$/.test(msgTrim) ? (msgTrim as COMMAND) : undefined;
+  msg = msg.trim();
+  return isCommand(msg) ? msg : undefined;
+}
+
+export function isCommand(msg: string): msg is COMMAND {
+  return /^\/[\w-.]*$/.test(msg.trim());
 }

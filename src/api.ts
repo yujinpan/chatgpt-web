@@ -1,10 +1,15 @@
-import type { ChatData } from './utils/chat-data';
+import type { ChatRole } from './utils/chat-data';
 
 import request from './utils/request';
 
+export type ChatAPIMessage = {
+  role: ChatRole.USER | ChatRole.SYSTEM | ChatRole.ASSISTANT;
+  content: string;
+};
+
 export function chatCompletions(data: {
   model: string;
-  messages: Pick<ChatData, 'role' | 'content'>[];
+  messages: ChatAPIMessage[];
 }) {
   return request.post<{
     id: string;
@@ -12,7 +17,7 @@ export function chatCompletions(data: {
     created: number;
     choices: {
       index: number;
-      message: Pick<ChatData, 'role' | 'content'>;
+      message: ChatAPIMessage;
       finish_reason: 'stop';
     }[];
     usage: {

@@ -3,12 +3,14 @@
     <li
       v-for="msg in visibleData"
       :key="msg.id"
-      :class="{ 'text-right': msg.role === 'user' }"
+      :class="{
+        'text-right': msg.isRight,
+      }"
     >
       <p class="chat-time" v-if="msg.showTime">
         {{ msg.created }}
       </p>
-      <MarkdownMsg :content="msg.content" />
+      <MarkdownMsg class="text-left" :content="msg.content" />
     </li>
     <li v-if="loading">
       <LoadingDot />
@@ -23,6 +25,7 @@ import type { ChatData } from '../utils/chat-data';
 
 import LoadingDot from './LoadingDot';
 import MarkdownMsg from './MarkdownMsg.vue';
+import { ChatRole } from '../utils/chat-data';
 import { formatDate } from '../utils/format';
 
 const props = defineProps<{
@@ -36,6 +39,9 @@ const visibleData = computed(() => {
   return props.data.map((item, index, array) => ({
     ...item,
     id: item.created || id++,
+    isRight: [ChatRole.USER, ChatRole.VISITOR, ChatRole.COMMAND].includes(
+      item.role,
+    ),
     created: formatDate(item.created),
     showTime: array[index - 1]
       ? item.created - array[index - 1].created > showTimeLimit
