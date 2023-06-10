@@ -7,6 +7,7 @@ export enum COMMAND {
   GPT4 = '/gpt-4',
   GPT3_5 = '/gpt-3.5-turbo',
   CLEAR = '/clear',
+  ISSUE = '/issue',
   HELP = '/help',
 }
 
@@ -16,6 +17,15 @@ export const COMMANDS: Record<COMMAND, () => void | Promise<string>> = {
   [COMMAND.CLEAR]: () => {
     localDataMessages.clear();
     return Promise.resolve(generateStartMsg());
+  },
+  [COMMAND.ISSUE]: () => {
+    return Promise.resolve(
+      `
+Thank you for your feedback:
+
+https://github.com/yujinpan/chatgpt-web/issues
+    `.trim(),
+    );
   },
   [COMMAND.HELP]: () => {
     return Promise.resolve(generateHelpMsg());

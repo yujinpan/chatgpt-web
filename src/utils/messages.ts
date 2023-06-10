@@ -21,6 +21,7 @@ Commands:
 - \`${COMMAND.GPT4}\` use ${GPT_MODEL.GPT4} model
 - \`${COMMAND.GPT3_5}\` use ${GPT_MODEL.GPT3_5} model
 - \`${COMMAND.CLEAR}\` clear history
+- \`${COMMAND.ISSUE}\` report issue
 - \`${COMMAND.HELP}\` show helper
 `.trim();
 }
