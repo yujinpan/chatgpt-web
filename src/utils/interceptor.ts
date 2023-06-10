@@ -21,7 +21,7 @@ export function useMsgInterceptors(
 export const msgInterceptorValidate: MsgInterceptor = (msg: string) => {
   if (!validateLocalAuthKey()) {
     if (!validateAuthKey(msg)) {
-      return Promise.reject(createChatData('Authentication key invalid.'));
+      return Promise.resolve(createChatData('Activation code invalid.'));
     } else {
       return Promise.resolve(createChatData(generateStartMsg()));
     }

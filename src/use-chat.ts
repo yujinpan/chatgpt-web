@@ -74,7 +74,7 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
     msgInterceptorValidate,
   ]);
   if (interceptorsResult) {
-    return interceptorsResult;
+    return interceptorsResult.catch((e) => createChatData(`Error: ${e}`));
   }
 
   return chatCompletions({
