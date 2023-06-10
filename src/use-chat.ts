@@ -6,7 +6,6 @@ import type { ChatData } from './utils/chat-data';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { validateAuthKey } from './utils/auth';
 import { ChatRole, createChatData } from './utils/chat-data';
 import { COMMAND, getCommand } from './utils/command';
 import { scrollToBottom } from './utils/dom';
@@ -16,7 +15,7 @@ import {
   useMsgInterceptors,
 } from './utils/interceptor';
 import { localDataMessages } from './utils/local-data';
-import { generateStartMsg, generateValidateMsg } from './utils/messages';
+import { generateStartMsg } from './utils/messages';
 import { appStore } from './utils/store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
@@ -66,8 +65,8 @@ export function useChat(chatInput: Ref<ChatInput>) {
 function requestChat(chatData: ChatData[]): Promise<ChatData> {
   const lastMsg = chatData[chatData.length - 1]?.content.slice(0, 400);
   const interceptorsResult = useMsgInterceptors(lastMsg, [
-    msgInterceptorValidate,
     msgInterceptorCommand,
+    msgInterceptorValidate,
   ]);
   if (interceptorsResult) {
     return interceptorsResult.then(createChatData, createChatData);
@@ -97,9 +96,5 @@ function initMessages(): ChatData[] {
         ...item,
         created: item.created || Date.now(),
       }))
-    : [
-        createChatData(
-          validateAuthKey() ? generateStartMsg() : generateValidateMsg(),
-        ),
-      ];
+    : [createChatData(generateStartMsg())];
 }
