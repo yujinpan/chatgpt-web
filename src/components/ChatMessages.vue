@@ -38,7 +38,7 @@ const visibleData = computed(() => {
   const showTimeLimit = 10 * 60 * 1000;
   return props.data.map((item, index, array) => ({
     ...item,
-    id: item.created || id++,
+    id: (item.created || 0) + id++,
     isRight: [ChatRole.USER, ChatRole.VISITOR, ChatRole.COMMAND].includes(
       item.role,
     ),
