@@ -28,6 +28,21 @@ const { markdownHtml } = useMarkdown(props);
   max-width: 80%;
   display: inline-block;
 
+  .highlight pre,
+  pre,
+  table tr {
+    background-color: $bg-color;
+  }
+
+  h1,
+  h2,
+  hr,
+  table tr,
+  table td,
+  table th {
+    border-color: $border-color;
+  }
+
   & > :first-child:not(pre, code, img, table) {
     margin-top: -$spacing-base * 0.5 !important;
   }
