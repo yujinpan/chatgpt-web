@@ -4,7 +4,7 @@
     "vite.config.*",
     "vitest.config.*",
     "cypress.config.*",
-    "vite-plugin-obf.ts",
+    "vite-plugin-*.ts",
     "package.json"
   ],
   "compilerOptions": {

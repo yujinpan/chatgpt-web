@@ -5,6 +5,7 @@ import { resolveWithAlias } from 'path-ops';
 import { defineConfig } from 'vite';
 
 import pkg from './package.json';
+import vitePluginGA from './vite-plugin-ga';
 import vitePluginObf from './vite-plugin-obf';
 
 const alias = {
@@ -20,6 +21,7 @@ export default defineConfig({
     vitePluginObf({
       include: ['src/utils/secret.ts', 'src/utils/auth.ts'],
     }),
+    vitePluginGA(),
   ],
   server: {
     proxy: {
