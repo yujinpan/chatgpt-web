@@ -34,7 +34,7 @@ const { input, inputElm, enter, handleCompositionEnd, handleCompositionStart } =
 .chat-input {
   width: 100%;
   height: 100%;
-  background-color: rgb(40 40 40);
+  background-color: $bg-color-base;
   border: 0;
   border-top: 1px solid $border-color;
   border-radius: $border-radius $border-radius 0 0;
