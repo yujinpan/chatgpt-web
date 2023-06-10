@@ -1,5 +1,6 @@
 <template>
   <textarea
+    ref="inputElm"
     v-model="input"
     class="chat-input"
     placeholder="typing..."
@@ -12,7 +13,7 @@
 </template>
 
 <script setup lang="tsx">
-import { ref } from 'vue';
+import { useInput } from './use-input';
 
 const props = defineProps<{ disabled: boolean }>();
 
@@ -20,21 +21,10 @@ const emit = defineEmits<{
   (event: 'submit', msg: string): void;
 }>();
 
-const isComposition = ref(false);
-const handleCompositionStart = () => (isComposition.value = true);
-const handleCompositionEnd = () => (isComposition.value = false);
-
-const input = ref('');
-const enter = (e: KeyboardEvent) => {
-  if (props.disabled || isComposition.value) return;
-
-  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
-    input.value += '\n';
-  } else if (input.value.trim()) {
-    emit('submit', input.value);
-    input.value = '';
-  }
-};
+const { input, inputElm, enter, handleCompositionEnd, handleCompositionStart } =
+  useInput(props, {
+    submit: (text) => emit('submit', text),
+  });
 </script>
 
 <style lang="scss">
