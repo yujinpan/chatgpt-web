@@ -20,6 +20,6 @@ const { markdownHtml } = useMarkdown(props);
 .markdown-body {
   background-color: $bg-color-overlay;
   border-radius: $border-radius;
-  padding: $spacing-base;
+  padding: $spacing-base * 1.5;
 }
 </style>
