@@ -23,7 +23,6 @@ import type { ChatData } from '../utils/chat-data';
 
 import LoadingDot from './LoadingDot';
 import MarkdownMsg from './MarkdownMsg.vue';
-import { ChatRole } from '../utils/chat-data';
 import { formatDate } from '../utils/format';
 
 const props = defineProps<{
@@ -33,21 +32,15 @@ const props = defineProps<{
 
 let id = 0;
 const visibleData = computed(() => {
-  const data = props.data.map((item, index, array) => ({
+  const showTimeLimit = 10 * 60 * 1000;
+  return props.data.map((item, index, array) => ({
     ...item,
     id: item.created || id++,
     created: formatDate(item.created),
     showTime: array[index - 1]
-      ? item.created - array[index - 1]?.created > 10 * 60 * 1000
+      ? item.created - array[index - 1].created > showTimeLimit
       : false,
   }));
-
-  const firstUser = data.find((item) => item.role === ChatRole.USER);
-  if (firstUser) {
-    firstUser.showTime = true;
-  }
-
-  return data;
 });
 </script>
 
