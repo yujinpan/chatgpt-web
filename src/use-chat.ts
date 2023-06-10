@@ -2,11 +2,12 @@ import debounce from 'lodash/debounce';
 import { nextTick, onMounted, ref, watch } from 'vue';
 
 import type ChatInput from './components/ChatInput.vue';
-import type { ChatData } from './types';
+import type { ChatData } from './utils/chat-data';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
 import { validateAuthKey } from './utils/auth';
+import { ChatRole, createChatData } from './utils/chat-data';
 import { COMMAND, getCommand } from './utils/command';
 import { scrollToBottom } from './utils/dom';
 import {
@@ -23,10 +24,7 @@ export function useChat(chatInput: Ref<ChatInput>) {
   const loading = ref(false);
 
   const sendMsg = (msg: string) => {
-    messages.value.push({
-      content: msg,
-      role: 'user',
-    });
+    messages.value.push(createChatData(msg, ChatRole.USER));
 
     loading.value = true;
     return requestChat(messages.value)
@@ -72,30 +70,31 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
     msgInterceptorCommand,
   ]);
   if (interceptorsResult) {
-    return interceptorsResult.then(
-      (e) => ({ content: e }),
-      (e) => ({ content: e }),
-    );
+    return interceptorsResult.then(createChatData, createChatData);
   }
 
   return chatCompletions({
     model: appStore.model,
     messages: chatData.filter((item) => !!item.role),
   }).then(
-    (res) => res.data.choices[0]?.message,
-    (e) => ({ content: `Error: ${e}` }),
+    (res) => {
+      const { role, content } = res.data.choices[0].message;
+      return createChatData(content, role);
+    },
+    (e) => createChatData(`Error: ${e}`),
   );
 }
 
 function initMessages(): ChatData[] {
   const localData = localDataMessages.get();
   return localData?.length
-    ? localData
+    ? localData.map((item) => ({
+        ...item,
+        created: item.created || Date.now(),
+      }))
     : [
-        {
-          content: validateAuthKey()
-            ? generateStartMsg()
-            : generateValidateMsg(),
-        },
+        createChatData(
+          validateAuthKey() ? generateStartMsg() : generateValidateMsg(),
+        ),
       ];
 }

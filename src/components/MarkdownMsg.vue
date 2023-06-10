@@ -21,6 +21,8 @@ const { markdownHtml } = useMarkdown(props);
   background-color: $bg-color-overlay;
   border-radius: $border-radius;
   padding: $spacing-base * 1.5;
+  max-width: 80%;
+  display: inline-block;
 
   & > :first-child:not(pre, code, img, table) {
     margin-top: -$spacing-base * 0.5 !important;

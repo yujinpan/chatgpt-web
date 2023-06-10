@@ -1,4 +1,4 @@
-import type { ChatData } from '../types';
+import type { ChatData } from './chat-data';
 
 export class LocalData<T = any> {
   constructor(readonly name: string) {}

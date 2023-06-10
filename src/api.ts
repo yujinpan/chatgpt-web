@@ -1,4 +1,4 @@
-import type { ChatData } from './types';
+import type { ChatData } from './utils/chat-data';
 
 import request from './utils/request';
 
