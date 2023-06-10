@@ -7,3 +7,5 @@ export enum GPT_MODEL {
 }
 
 export const GPT_MODELS = [GPT_MODEL.GPT3_5, GPT_MODEL.GPT4];
+
+export const BUILD = __BUILD__;

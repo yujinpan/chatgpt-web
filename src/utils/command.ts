@@ -1,11 +1,12 @@
 import { localDataMessages } from './local-data';
 import { generateHelpMsg, generateStartMsg } from './messages';
 import { appStore } from './store';
-import { GPT_MODEL } from '../config';
+import { BUILD, GPT_MODEL } from '../config';
 
 export enum COMMAND {
   GPT4 = '/gpt-4',
   GPT3_5 = '/gpt-3.5-turbo',
+  VERSION = '/version',
   CLEAR = '/clear',
   ISSUE = '/issue',
   HELP = '/help',
@@ -14,6 +15,16 @@ export enum COMMAND {
 export const COMMANDS: Record<COMMAND, () => void | Promise<string>> = {
   [COMMAND.GPT4]: () => handleChangeModel(GPT_MODEL.GPT4),
   [COMMAND.GPT3_5]: () => handleChangeModel(GPT_MODEL.GPT3_5),
+  [COMMAND.VERSION]: () => {
+    return Promise.resolve(`
+### Version
+
+- name: \`${BUILD.name}\`
+- version: \`${BUILD.version}\`
+- dateTime: \`${BUILD.dateTime}\`
+- model: \`${appStore.model}\`
+    `);
+  },
   [COMMAND.CLEAR]: () => {
     localDataMessages.clear();
     return Promise.resolve(generateStartMsg());

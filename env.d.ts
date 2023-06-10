@@ -15,3 +15,5 @@ interface Window {
   shiki: any;
   markdownit: any;
 }
+
+declare const __BUILD__: { name: string; version: string; dateTime: string };

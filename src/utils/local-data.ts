@@ -28,6 +28,8 @@ export class LocalData<T = any> {
 
 export const localDataMessages = new LocalData<ChatData[]>('messages');
 
+export const localDataVersion = new LocalData<string>('version');
+
 export function readLocalData(key: string) {
   const data = localStorage.getItem(key);
   try {
