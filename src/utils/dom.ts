@@ -25,7 +25,7 @@ export function scrollToBottom(bottomHeight: number, immediate = false) {
   let currentScrollTop = document.scrollingElement.scrollTop;
   const interval = (scrollTop - currentScrollTop) / 30;
   const scroll = () => {
-    if (currentScrollTop > scrollTop) return;
+    if (currentScrollTop >= scrollTop) return;
 
     currentScrollTop += interval;
     document.scrollingElement.scrollTop = currentScrollTop;
