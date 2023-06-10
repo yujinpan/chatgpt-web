@@ -5,6 +5,7 @@
     class="chat-input"
     placeholder="typing..."
     autofocus
+    maxlength="400"
     @keydown.enter.prevent="enter"
     @compositionstart="handleCompositionStart"
     @compositionend="handleCompositionEnd"

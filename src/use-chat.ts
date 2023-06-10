@@ -66,7 +66,7 @@ export function useChat(chatInput: Ref<ChatInput>) {
 }
 
 function requestChat(chatData: ChatData[]): Promise<ChatData> {
-  const lastMsg = chatData[chatData.length - 1]?.content;
+  const lastMsg = chatData[chatData.length - 1]?.content.slice(0, 400);
   const interceptorsResult = useMsgInterceptors(lastMsg, [
     msgInterceptorValidate,
     msgInterceptorCommand,
