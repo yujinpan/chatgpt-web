@@ -1,5 +1,9 @@
 <template>
-  <div v-if="markdownHtml" class="markdown-body" v-html="markdownHtml"></div>
+  <div
+    v-if="markdownHtml"
+    class="markdown-body text-left"
+    v-html="markdownHtml"
+  ></div>
   <LoadingDot v-else />
 </template>
 
