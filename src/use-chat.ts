@@ -6,9 +6,16 @@ import type { ChatData } from './types';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { GPT_MODELS } from './config';
-import { validateAuthKey, validateLocalAuthKey } from './utils/auth';
+import { validateAuthKey } from './utils/auth';
+import { COMMAND, getCommand } from './utils/command';
+import { scrollToBottom } from './utils/dom';
+import {
+  msgInterceptorCommand,
+  msgInterceptorValidate,
+  useMsgInterceptors,
+} from './utils/interceptor';
 import { localDataMessages } from './utils/local-data';
+import { generateStartMsg } from './utils/messages';
 import { appStore } from './utils/store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
@@ -34,7 +41,13 @@ export function useChat(chatInput: Ref<ChatInput>) {
 
     loading.value = true;
     return requestChat(messages.value)
-      .then((data) => messages.value.push(data))
+      .then((data) => {
+        if (getCommand(msg) === COMMAND.CLEAR) {
+          messages.value = [];
+        }
+
+        messages.value.push(data);
+      })
       .finally(() => (loading.value = false));
   };
 
@@ -67,7 +80,7 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
   const lastMsg = chatData[chatData.length - 1]?.content;
   const interceptorsResult = useMsgInterceptors(lastMsg, [
     msgInterceptorValidate,
-    msgInterceptorChangeModel,
+    msgInterceptorCommand,
   ]);
   if (interceptorsResult) {
     return interceptorsResult.then(
@@ -83,67 +96,4 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
     (res) => res.data.choices[0]?.message,
     (e) => ({ content: `Error: ${e}` }),
   );
-}
-
-interface MsgInterceptor {
-  (msg: string): undefined | Promise<string>;
-}
-
-function useMsgInterceptors(
-  msg: string,
-  interceptors: MsgInterceptor[],
-): Promise<string> | undefined {
-  return interceptors.length
-    ? interceptors[0](msg) || useMsgInterceptors(msg, interceptors.slice(1))
-    : undefined;
-}
-
-function msgInterceptorValidate(msg: string) {
-  if (!validateLocalAuthKey()) {
-    if (!validateAuthKey(msg)) {
-      return Promise.reject('Authentication key invalid.');
-    } else {
-      return Promise.resolve(generateStartMsg());
-    }
-  }
-}
-
-function msgInterceptorChangeModel(msg: string) {
-  const model = msg.trim().toLowerCase().replace(/^\//, '');
-  if (GPT_MODELS.includes(model)) {
-    appStore.model = model;
-    return Promise.resolve(generateStartMsg());
-  }
-}
-
-function generateStartMsg() {
-  return `Welcome to use ${appStore.model}.`;
-}
-
-let requestAnimationFrameNumber;
-function scrollToBottom(bottomHeight: number, immediate = false) {
-  if (requestAnimationFrameNumber) {
-    cancelAnimationFrame(requestAnimationFrameNumber);
-    requestAnimationFrameNumber = null;
-  }
-
-  const scrollTop =
-    document.body.clientHeight -
-    (document.documentElement.clientHeight - bottomHeight);
-
-  if (immediate) {
-    document.scrollingElement.scrollTop = scrollTop;
-    return;
-  }
-
-  let currentScrollTop = document.scrollingElement.scrollTop;
-  const interval = (scrollTop - currentScrollTop) / 30;
-  const scroll = () => {
-    if (currentScrollTop > scrollTop) return;
-
-    currentScrollTop += interval;
-    document.scrollingElement.scrollTop = currentScrollTop;
-    requestAnimationFrameNumber = requestAnimationFrame(scroll);
-  };
-  requestAnimationFrameNumber = requestAnimationFrame(scroll);
 }

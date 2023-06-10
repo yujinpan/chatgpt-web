@@ -1,3 +1,5 @@
+import type { GPT_MODEL } from '../config';
+
 import { GPT_MODELS } from '../config';
 
 class AppStore {
@@ -5,7 +7,7 @@ class AppStore {
   get model() {
     return this._model;
   }
-  set model(model: string) {
+  set model(model: GPT_MODEL) {
     this._model = model;
   }
 }

@@ -20,6 +20,10 @@ export class LocalData<T = any> {
 
     return setLocalData(this.name, data);
   }
+
+  clear() {
+    localStorage.removeItem(this.name);
+  }
 }
 
 export const localDataMessages = new LocalData<ChatData[]>('messages');
