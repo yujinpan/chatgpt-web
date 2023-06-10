@@ -1,6 +1,10 @@
 import { COMMAND } from './command';
 import { appStore } from './store';
 
+export function generateValidateMsg() {
+  return `Please enter your activation code.`.trim();
+}
+
 export function generateStartMsg() {
   return `
 ### Welcome to use ${appStore.model}.

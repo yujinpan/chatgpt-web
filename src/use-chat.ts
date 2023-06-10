@@ -15,22 +15,11 @@ import {
   useMsgInterceptors,
 } from './utils/interceptor';
 import { localDataMessages } from './utils/local-data';
-import { generateStartMsg } from './utils/messages';
+import { generateStartMsg, generateValidateMsg } from './utils/messages';
 import { appStore } from './utils/store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
-  const localData = localDataMessages.get();
-  const messages = ref<ChatData[]>(
-    localData?.length
-      ? localData
-      : [
-          {
-            content: validateAuthKey()
-              ? generateStartMsg()
-              : 'Please enter your authentication key.',
-          },
-        ],
-  );
+  const messages = ref<ChatData[]>(initMessages());
   const loading = ref(false);
 
   const sendMsg = (msg: string) => {
@@ -96,4 +85,17 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
     (res) => res.data.choices[0]?.message,
     (e) => ({ content: `Error: ${e}` }),
   );
+}
+
+function initMessages(): ChatData[] {
+  const localData = localDataMessages.get();
+  return localData?.length
+    ? localData
+    : [
+        {
+          content: validateAuthKey()
+            ? generateStartMsg()
+            : generateValidateMsg(),
+        },
+      ];
 }
