@@ -21,5 +21,12 @@ const { markdownHtml } = useMarkdown(props);
   background-color: $bg-color-overlay;
   border-radius: $border-radius;
   padding: $spacing-base * 1.5;
+
+  & > :first-child:not(pre, code, img, table) {
+    margin-top: -$spacing-base * 0.5 !important;
+  }
+  & > :last-child:not(pre, code, img, table) {
+    margin-bottom: -$spacing-base * 0.5 !important;
+  }
 }
 </style>
