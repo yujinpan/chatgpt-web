@@ -75,7 +75,12 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
 
   return chatCompletions({
     model: appStore.model,
-    messages: chatData.filter((item) => !!item.role),
+    messages: chatData
+      .filter((item) => !!item.role)
+      .map((item) => ({
+        role: item.role,
+        content: item.content,
+      })),
   }).then(
     (res) => {
       const { role, content } = res.data.choices[0].message;
