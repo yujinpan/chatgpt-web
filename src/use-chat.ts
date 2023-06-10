@@ -91,12 +91,7 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
 
 function initMessages(): ChatData[] {
   const localData = localDataMessages.get();
-  return localData?.length
-    ? localData.map((item) => ({
-        ...item,
-        created: item.created || Date.now(),
-      }))
-    : [createChatData(generateStartMsg())];
+  return localData?.length ? localData : [createChatData(generateStartMsg())];
 }
 
 function getRole(msg: string) {
