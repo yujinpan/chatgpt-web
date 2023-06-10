@@ -38,9 +38,9 @@ export function useChat(chatInput: Ref<ChatInput>) {
       .finally(() => (loading.value = false));
   };
 
-  const updateScroll = debounce(async () => {
+  const updateScroll = debounce(async (immediate: boolean) => {
     await nextTick(() => {
-      scrollToBottom(chatInput.value.$el.clientHeight);
+      scrollToBottom(chatInput.value.$el.clientHeight, immediate);
     });
   }, 100);
 
@@ -53,7 +53,7 @@ export function useChat(chatInput: Ref<ChatInput>) {
   );
 
   onMounted(() => {
-    updateScroll();
+    updateScroll(true);
   });
 
   return {
@@ -120,8 +120,30 @@ function generateStartMsg() {
   return `Welcome to use ${appStore.model}.`;
 }
 
-function scrollToBottom(bottomHeight: number) {
-  document.scrollingElement.scrollTop =
+let requestAnimationFrameNumber;
+function scrollToBottom(bottomHeight: number, immediate = false) {
+  if (requestAnimationFrameNumber) {
+    cancelAnimationFrame(requestAnimationFrameNumber);
+    requestAnimationFrameNumber = null;
+  }
+
+  const scrollTop =
     document.body.clientHeight -
     (document.documentElement.clientHeight - bottomHeight);
+
+  if (immediate) {
+    document.scrollingElement.scrollTop = scrollTop;
+    return;
+  }
+
+  let currentScrollTop = document.scrollingElement.scrollTop;
+  const interval = (scrollTop - currentScrollTop) / 30;
+  const scroll = () => {
+    if (currentScrollTop > scrollTop) return;
+
+    currentScrollTop += interval;
+    document.scrollingElement.scrollTop = currentScrollTop;
+    requestAnimationFrameNumber = requestAnimationFrame(scroll);
+  };
+  requestAnimationFrameNumber = requestAnimationFrame(scroll);
 }
