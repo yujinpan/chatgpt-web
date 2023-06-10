@@ -25,6 +25,7 @@ Commands:
 - \`${COMMAND.GPT3_5}\` use ${GPT_MODEL.GPT3_5} model
 - \`${COMMAND.CLEAR}\` clear history
 - \`${COMMAND.ISSUE}\` report issue
+- \`${COMMAND.VERSION}\` show version
 - \`${COMMAND.HELP}\` show helper
 `.trim();
 }

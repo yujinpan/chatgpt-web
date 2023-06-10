@@ -6,9 +6,9 @@ import { BUILD, GPT_MODEL } from '../config';
 export enum COMMAND {
   GPT4 = '/gpt-4',
   GPT3_5 = '/gpt-3.5-turbo',
-  VERSION = '/version',
   CLEAR = '/clear',
   ISSUE = '/issue',
+  VERSION = '/version',
   HELP = '/help',
 }
 
