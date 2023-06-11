@@ -4,7 +4,7 @@ import { getHeaders } from './secret';
 import { BASE_URL } from '../config';
 
 const request = axios.create({
-  baseURL: import.meta.env.DEV ? '/api' : BASE_URL,
+  baseURL: BASE_URL,
   validateStatus: (status) => status <= 500,
 });
 
