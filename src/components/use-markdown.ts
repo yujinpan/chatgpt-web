@@ -4,6 +4,7 @@ import { removeAttr } from '../utils/format';
 
 export function useMarkdown(props: { content: string }) {
   const markdownHtml = ref('');
+  const loading = ref(false);
 
   const renderMarkdown = (highlight?) => {
     const md = window.markdownit({
@@ -18,18 +19,23 @@ export function useMarkdown(props: { content: string }) {
   onMounted(() => {
     const langs = getLangs(props.content);
 
+    loading.value = true;
     if (langs?.length) {
-      highlightCode(langs).then(
-        (highlight) => renderMarkdown(highlight),
-        () => renderMarkdown(),
-      );
+      highlightCode(langs)
+        .then(
+          (highlight) => renderMarkdown(highlight),
+          () => renderMarkdown(),
+        )
+        .finally(() => (loading.value = false));
     } else {
       renderMarkdown();
+      loading.value = false;
     }
   });
 
   return {
     markdownHtml,
+    loading,
   };
 }
 

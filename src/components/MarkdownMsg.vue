@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="markdownHtml"
+    v-if="!loading"
     class="markdown-body text-left"
     v-html="markdownHtml"
   ></div>
@@ -15,7 +15,7 @@ const props = defineProps<{
   content: string;
 }>();
 
-const { markdownHtml } = useMarkdown(props);
+const { markdownHtml, loading } = useMarkdown(props);
 </script>
 
 <style lang="scss">
