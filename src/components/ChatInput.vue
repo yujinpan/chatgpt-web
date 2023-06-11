@@ -5,7 +5,7 @@
     class="chat-input"
     placeholder="typing..."
     autofocus
-    maxlength="400"
+    :maxlength="maxLen"
     @keydown.enter.prevent="enter"
     @compositionstart="handleCompositionStart"
     @compositionend="handleCompositionEnd"
@@ -16,7 +16,7 @@
 <script setup lang="tsx">
 import { useInput } from './use-input';
 
-const props = defineProps<{ disabled: boolean }>();
+const props = defineProps<{ disabled: boolean; maxLen: number }>();
 
 const emit = defineEmits<{
   (event: 'submit', msg: string): void;

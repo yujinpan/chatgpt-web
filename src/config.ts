@@ -9,3 +9,5 @@ export enum GPT_MODEL {
 export const GPT_MODELS = [GPT_MODEL.GPT3_5, GPT_MODEL.GPT4];
 
 export const BUILD = __BUILD__;
+
+export const GPT_MSG_MAX_LEN = 2048;

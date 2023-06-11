@@ -1,7 +1,12 @@
 <template>
   <div class="app">
     <ChatMessages ref="contentElem" :data="messages" :loading="loading" />
-    <ChatInput ref="chatInput" @submit="sendMsg" :disabled="loading" />
+    <ChatInput
+      ref="chatInput"
+      @submit="sendMsg"
+      :disabled="loading"
+      :max-len="GPT_MSG_MAX_LEN"
+    />
   </div>
 </template>
 
@@ -10,6 +15,7 @@ import { ref } from 'vue';
 
 import ChatInput from './components/ChatInput.vue';
 import ChatMessages from './components/ChatMessages.vue';
+import { GPT_MSG_MAX_LEN } from './config';
 import { useChat } from './use-chat';
 
 const chatInput = ref<ChatInput>();

@@ -6,6 +6,7 @@ import type { ChatData } from './utils/chat-data';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
+import { GPT_MSG_MAX_LEN } from './config';
 import { validateLocalAuthKey } from './utils/auth';
 import {
   ChatRole,
@@ -68,7 +69,10 @@ export function useChat(chatInput: Ref<ChatInput>) {
 }
 
 function requestChat(chatData: ChatData[]): Promise<ChatData> {
-  const lastMsg = chatData[chatData.length - 1]?.content.slice(0, 400);
+  const lastMsg = chatData[chatData.length - 1]?.content.slice(
+    0,
+    GPT_MSG_MAX_LEN,
+  );
   const interceptorsResult = useMsgInterceptors(lastMsg, [
     msgInterceptorCommand,
     msgInterceptorValidate,
