@@ -19,7 +19,11 @@ export default defineConfig({
     vue(),
     vueJsx(),
     vitePluginObf({
-      include: ['src/utils/secret.ts', 'src/utils/auth.ts'],
+      include: [
+        'src/utils/secret.ts',
+        'src/utils/auth.ts',
+        'src/utils/interceptor',
+      ],
     }),
     vitePluginGA(),
   ],
