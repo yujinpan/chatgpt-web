@@ -8,7 +8,7 @@ export function streamToObservable(stream: ReadableStream<Uint8Array>) {
     const push = () => {
       reader.read().then(
         ({ done, value }) => {
-          const json = streamDataToJSON(String.fromCharCode.apply(null, value));
+          const json = streamDataToJSON(new TextDecoder('utf-8').decode(value));
 
           if (done) {
             subscriber.complete();
