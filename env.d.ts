@@ -1,10 +1,10 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_APP_KEY: string;
-  readonly VITE_APP_SECRET: string;
   readonly VITE_APP_AUTH_KEY: string;
   readonly VITE_APP_ENCRYPT_KEY: string;
+  readonly VITE_APP_SECRET_ID: string;
+  readonly VITE_APP_SECRET_KEY: string;
 }
 
 interface ImportMeta {

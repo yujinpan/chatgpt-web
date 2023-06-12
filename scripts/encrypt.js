@@ -15,8 +15,8 @@ encodeEnv();
 function encodeEnv() {
   let envContent = readFileSync(env).toString();
 
-  ['VITE_APP_SECRET_O', 'VITE_APP_AUTH_KEY_O'].forEach((key) => {
-    const replaceKey = key.replace('_O', '');
+  ['VITE_APP_AUTH_KEY_ORIGIN', 'VITE_APP_SECRET_KEY_ORIGIN'].forEach((key) => {
+    const replaceKey = key.replace('_ORIGIN', '');
     const replaceContent = encodeKey(process.env[key]);
 
     envContent = envContent.replace(

@@ -13,7 +13,7 @@ dist
 dist-ssr
 coverage
 *.local
-src/utils/secret.ts
+src/utils/secret*
 
 /cypress/videos/
 /cypress/screenshots/
