@@ -1,5 +1,5 @@
-import debounce from 'lodash/debounce';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import throttle from 'lodash/throttle';
+import { nextTick, onMounted, reactive, ref, watch } from 'vue';
 
 import type ChatInput from './components/ChatInput.vue';
 import type { ChatData } from './utils/chat-data';
@@ -13,6 +13,7 @@ import {
   createChatData,
   getChatAPIMessages,
 } from './utils/chat-data';
+import { readStreamJSONContent, streamToObservable } from './utils/chat-stream';
 import { COMMAND, getCommand, isCommand } from './utils/command';
 import { scrollToBottom } from './utils/dom';
 import {
@@ -43,17 +44,25 @@ export function useChat(chatInput: Ref<ChatInput>) {
       .finally(() => (loading.value = false));
   };
 
-  const updateScroll = debounce(async (immediate: boolean) => {
+  const updateScroll = throttle(async (immediate: boolean) => {
     await nextTick(() => {
       scrollToBottom(chatInput.value.$el.clientHeight, immediate);
     });
   }, 100);
 
   watch(
-    () => messages.value.length,
+    () => messages.value,
     () => {
-      localDataMessages.set(messages.value);
+      localDataMessages.set(
+        messages.value.map((item) => ({
+          ...item,
+          typing: undefined,
+        })),
+      );
       updateScroll();
+    },
+    {
+      deep: true,
     },
   );
 
@@ -84,10 +93,24 @@ function requestChat(chatData: ChatData[]): Promise<ChatData> {
   return chatCompletions({
     model: appStore.model,
     messages: getChatAPIMessages(chatData),
+    stream: true,
   }).then(
     (res) => {
-      const { role, content } = res.data.choices[0].message;
-      return createChatData(content, role);
+      const ob = streamToObservable(res.body);
+      const chatData = reactive({
+        ...createChatData('', ChatRole.ASSISTANT),
+        typing: true,
+      });
+      ob.subscribe({
+        next: (val) => (chatData.content += readStreamJSONContent(val)),
+        complete: () => {
+          chatData.typing = false;
+        },
+        error: (err) => {
+          chatData.content += String(err);
+        },
+      });
+      return chatData;
     },
     (e) => createChatData(`Error: ${e}`),
   );

@@ -12,6 +12,7 @@ export type ChatData = {
   role?: ChatRole;
   content: string;
   created: number;
+  typing?: boolean;
 };
 
 export function createChatData(content: string, role?: ChatRole): ChatData {
@@ -19,6 +20,7 @@ export function createChatData(content: string, role?: ChatRole): ChatData {
     role,
     content,
     created: Date.now(),
+    typing: false,
   };
 }
 

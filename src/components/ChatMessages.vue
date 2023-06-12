@@ -10,7 +10,7 @@
       <p class="chat-time" v-if="msg.showTime">
         {{ msg.created }}
       </p>
-      <MarkdownMsg :content="msg.content" />
+      <MarkdownMsg :content="msg.content" :typing="msg.typing" />
     </li>
     <li v-if="loading">
       <LoadingDot />

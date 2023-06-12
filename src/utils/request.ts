@@ -1,32 +1,21 @@
-import axios from 'axios';
-
-import { getHeaders } from './secret';
+import { getSecretKeyHeaders } from './secret';
 import { BASE_URL } from '../config';
 
-const request = axios.create({
-  baseURL: BASE_URL,
-  validateStatus: (status) => status <= 500,
-});
-
-request.interceptors.request.use((config) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  config.headers = getHeaders(
-    config.url,
-    config.method.toUpperCase(),
-    config.data,
-  );
-  return config;
-});
-
-request.interceptors.response.use((res) => {
-  if (res.status !== 200) {
-    return Promise.reject(
-      res.data?.error?.message || `${res.status}, ${res.statusText}`,
-    );
-  }
-
-  return res;
-});
-
-export default request;
+export default function request(url: string, requestInit?: RequestInit) {
+  return fetch(`${BASE_URL}${url}`, {
+    ...requestInit,
+    headers: {
+      ...getSecretKeyHeaders(),
+      'Content-Type': 'application/json',
+      ...(requestInit.headers || {}),
+    },
+  }).then((res) => {
+    if (res.status >= 400) {
+      return res.text().then((e) => {
+        return Promise.reject(`${res.status} ${e}`);
+      });
+    } else {
+      return res;
+    }
+  });
+}

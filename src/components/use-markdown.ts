@@ -1,10 +1,16 @@
-import { onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { removeAttr } from '../utils/format';
 
-export function useMarkdown(props: { content: string }) {
+export function useMarkdown(props: { content: string; typing: boolean }) {
   const markdownHtml = ref('');
   const loading = ref(false);
+  const markdownContent = computed(() => {
+    return (
+      (props.content || '') +
+      (props.typing || loading.value ? '<span class="typing">_</span>' : '')
+    );
+  });
 
   const renderMarkdown = (highlight?) => {
     const md = window.markdownit({
@@ -13,14 +19,14 @@ export function useMarkdown(props: { content: string }) {
       highlight,
     });
 
-    markdownHtml.value = md.render(props.content);
+    markdownHtml.value = md.render(markdownContent.value);
   };
 
-  onMounted(() => {
-    const langs = getLangs(props.content);
+  const load = () => {
+    const langs = getLangs(markdownContent.value);
 
-    loading.value = true;
     if (langs?.length) {
+      loading.value = true;
       highlightCode(langs)
         .then(
           (highlight) => renderMarkdown(highlight),
@@ -29,9 +35,10 @@ export function useMarkdown(props: { content: string }) {
         .finally(() => (loading.value = false));
     } else {
       renderMarkdown();
-      loading.value = false;
     }
-  });
+  };
+
+  watch(() => markdownContent.value, load, { immediate: true });
 
   return {
     markdownHtml,

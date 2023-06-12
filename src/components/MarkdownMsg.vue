@@ -1,21 +1,16 @@
 <template>
-  <div
-    v-if="!loading"
-    class="markdown-body text-left"
-    v-html="markdownHtml"
-  ></div>
-  <LoadingDot v-else />
+  <div class="markdown-body text-left" v-html="markdownHtml"></div>
 </template>
 
 <script setup lang="tsx">
-import LoadingDot from './LoadingDot';
 import { useMarkdown } from './use-markdown';
 
 const props = defineProps<{
   content: string;
+  typing?: boolean;
 }>();
 
-const { markdownHtml, loading } = useMarkdown(props);
+const { markdownHtml } = useMarkdown(props);
 </script>
 
 <style lang="scss">
@@ -48,6 +43,19 @@ const { markdownHtml, loading } = useMarkdown(props);
   }
   & > :last-child:not(pre, code, img, table) {
     margin-bottom: -$spacing-base * 0.5 !important;
+  }
+
+  .typing {
+    font-weight: bold;
+    animation: typing 0.35s infinite alternate;
+  }
+  @keyframes typing {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 </style>

@@ -10,20 +10,10 @@ export type ChatAPIMessage = {
 export function chatCompletions(data: {
   model: string;
   messages: ChatAPIMessage[];
+  stream?: boolean;
 }) {
-  return request.post<{
-    id: string;
-    object: 'chat.completion';
-    created: number;
-    choices: {
-      index: number;
-      message: ChatAPIMessage;
-      finish_reason: 'stop';
-    }[];
-    usage: {
-      prompt_tokens: number;
-      completion_tokens: number;
-      total_tokens: number;
-    };
-  }>(`/chatgpt`, data);
+  return request('/chat', {
+    method: 'post',
+    body: JSON.stringify(data),
+  });
 }
