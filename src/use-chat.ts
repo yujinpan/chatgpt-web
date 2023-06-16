@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import { nextTick, onMounted, reactive, ref, watch } from 'vue';
+import { nextTick, onMounted, provide, reactive, ref, watch } from 'vue';
 
 import type ChatInput from './components/ChatInput.vue';
 import type { ChatData } from './utils/chat-data';
@@ -23,7 +23,7 @@ import {
 } from './utils/interceptor';
 import { localDataMessages } from './utils/local-data';
 import { generateStartMsg } from './utils/messages';
-import { appStore } from './utils/store';
+import { appStore, UPDATE_SCROLL_INJECT_KEY } from './utils/store';
 
 export function useChat(chatInput: Ref<ChatInput>) {
   const messages = ref<ChatData[]>(initMessages());
@@ -49,6 +49,8 @@ export function useChat(chatInput: Ref<ChatInput>) {
       scrollToBottom(chatInput.value.$el.clientHeight, immediate);
     });
   }, 100);
+
+  provide(UPDATE_SCROLL_INJECT_KEY, updateScroll);
 
   watch(
     () => messages.value,

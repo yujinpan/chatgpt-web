@@ -1,6 +1,7 @@
-import { computed, ref, watch } from 'vue';
+import { computed, inject, nextTick, ref, watch } from 'vue';
 
 import { removeAttr } from '../utils/format';
+import { UPDATE_SCROLL_INJECT_KEY } from '../utils/store';
 
 export function useMarkdown(props: { content: string; typing: boolean }) {
   const markdownHtml = ref('');
@@ -16,6 +17,8 @@ export function useMarkdown(props: { content: string; typing: boolean }) {
     );
   });
 
+  const updateScroll = inject(UPDATE_SCROLL_INJECT_KEY);
+
   const renderMarkdown = (highlight?) => {
     const md = window.markdownit({
       html: true,
@@ -24,6 +27,10 @@ export function useMarkdown(props: { content: string; typing: boolean }) {
     });
 
     markdownHtml.value = md.render(markdownContent.value);
+
+    nextTick(() => {
+      updateScroll();
+    });
   };
 
   const load = () => {

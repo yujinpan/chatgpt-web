@@ -1,4 +1,5 @@
 import type { GPT_MODEL } from '../config';
+import type { InjectionKey } from 'vue';
 
 import { GPT_MODELS } from '../config';
 
@@ -13,3 +14,5 @@ class AppStore {
 }
 
 export const appStore = new AppStore();
+
+export const UPDATE_SCROLL_INJECT_KEY = Symbol() as InjectionKey<() => void>;
