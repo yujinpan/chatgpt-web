@@ -11,7 +11,7 @@ export function useMarkdown(props: { content: string; typing: boolean }) {
       (props.typing
         ? (content.match(/```/g)?.length || 0) % 2
           ? ' _'
-          : '<span class="typing"> _</span>'
+          : ' <span class="typing">_</span>'
         : '')
     );
   });
@@ -27,7 +27,9 @@ export function useMarkdown(props: { content: string; typing: boolean }) {
   };
 
   const load = () => {
-    const langs = getLangs(markdownContent.value);
+    const langs = getLangs(markdownContent.value).filter(
+      isShikiSupportLanguage,
+    );
     if (langs?.length) {
       getHighlighter(langs).then((highlight) => renderMarkdown(highlight));
     } else {
@@ -43,7 +45,17 @@ export function useMarkdown(props: { content: string; typing: boolean }) {
 }
 
 function getLangs(text: string) {
-  return text.match(/```[\w-]+/g)?.map((item) => item.replace('```', ''));
+  return (
+    text.match(/```[a-z1-9-]+/g)?.map((item) => item.replace('```', '')) || []
+  );
+}
+
+const shikiSupportLangs: string[] = window.shiki.BUNDLED_LANGUAGES.flatMap(
+  (item) => (item.aliases || []).concat(item.id),
+);
+
+function isShikiSupportLanguage(language: string) {
+  return shikiSupportLangs.includes(language);
 }
 
 let highlighter;
@@ -71,5 +83,9 @@ async function getHighlighter(langs: string[]): Promise<(str, lang) => string> {
 }
 
 function highlighterWrapper(str, lang) {
-  return removeAttr(highlighter.codeToHtml(str, { lang }), 'pre', 'style');
+  try {
+    return removeAttr(highlighter.codeToHtml(str, { lang }), 'pre', 'style');
+  } catch (e) {
+    return '';
+  }
 }
