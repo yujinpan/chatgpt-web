@@ -1,31 +1,27 @@
 import type { ChatData } from './chat-data';
 
-import { validateAuthKey, validateLocalAuthKey } from './auth';
+import { validateActivationCode } from './auth';
 import { createChatData } from './chat-data';
 import { COMMANDS, getCommand } from './command';
-import { generateStartMsg } from './messages';
 
 interface MsgInterceptor {
-  (msg: string): void | Promise<ChatData>;
+  (msg: string): void | undefined | Promise<ChatData | void | undefined>;
 }
 
-export function useMsgInterceptors(
+export async function useMsgInterceptors(
   msg: string,
   interceptors: MsgInterceptor[],
 ): Promise<ChatData> | undefined {
   return interceptors.length
-    ? interceptors[0](msg) || useMsgInterceptors(msg, interceptors.slice(1))
+    ? (await interceptors[0](msg)) ||
+        useMsgInterceptors(msg, interceptors.slice(1))
     : undefined;
 }
 
-export const msgInterceptorValidate: MsgInterceptor = (msg: string) => {
-  if (!validateLocalAuthKey()) {
-    if (!validateAuthKey(msg)) {
-      return Promise.resolve(createChatData('Activation code invalid.'));
-    } else {
-      return Promise.resolve(createChatData(generateStartMsg()));
-    }
-  }
+export const msgInterceptorValidate: MsgInterceptor = () => {
+  return validateActivationCode().then(() => {
+    return undefined;
+  });
 };
 export const msgInterceptorCommand: MsgInterceptor = (msg: string) => {
   const command = getCommand(msg);

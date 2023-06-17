@@ -1,17 +1,9 @@
-import { getAuthKey } from './secret';
+import { validateCode } from '../api';
 
-const LOCAL_AUTH_KEY = 'LOCAL_AUTH_KEY';
-
-export function validateLocalAuthKey() {
-  return localStorage.getItem(LOCAL_AUTH_KEY) === getAuthKey();
-}
-
-export function validateAuthKey(code?: string) {
-  if (validateLocalAuthKey()) return true;
-
-  const state = getAuthKey() === code;
-  if (state) {
-    localStorage.setItem(LOCAL_AUTH_KEY, code);
-  }
-  return state;
+export function validateActivationCode(
+  code = 'ZVhWcWFXNXdZVzQ9MTY4NzAwMDk0ODUyNDE2ODcwMDA5NDg1MjQ=',
+): Promise<number> {
+  return validateCode(code).then((res) => {
+    return res.json().then((res) => res.count);
+  });
 }

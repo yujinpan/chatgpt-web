@@ -7,7 +7,6 @@ import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
 import { GPT_MSG_MAX_LEN } from './config';
-import { validateLocalAuthKey } from './utils/auth';
 import {
   ChatRole,
   createChatData,
@@ -79,17 +78,19 @@ export function useChat(chatInput: Ref<ChatInput>) {
   };
 }
 
-function requestChat(chatData: ChatData[]): Promise<ChatData> {
+async function requestChat(chatData: ChatData[]): Promise<ChatData> {
   const lastMsg = chatData[chatData.length - 1]?.content.slice(
     0,
     GPT_MSG_MAX_LEN,
   );
-  const interceptorsResult = useMsgInterceptors(lastMsg, [
+  const interceptorsResult = await useMsgInterceptors(lastMsg, [
     msgInterceptorCommand,
     msgInterceptorValidate,
-  ]);
+  ]).catch((e) => {
+    return createChatData(`Error: ${e}`);
+  });
   if (interceptorsResult) {
-    return interceptorsResult.catch((e) => createChatData(`Error: ${e}`));
+    return interceptorsResult;
   }
 
   return chatCompletions({
@@ -124,9 +125,5 @@ function initMessages(): ChatData[] {
 }
 
 function getRole(msg: string) {
-  return isCommand(msg)
-    ? ChatRole.COMMAND
-    : validateLocalAuthKey()
-    ? ChatRole.USER
-    : ChatRole.VISITOR;
+  return isCommand(msg) ? ChatRole.COMMAND : ChatRole.USER;
 }
