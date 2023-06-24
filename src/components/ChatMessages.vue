@@ -42,9 +42,8 @@ const visibleData = computed(() => {
       item.role,
     ),
     created: formatDate(item.created),
-    showTime: array[index - 1]
-      ? item.created - array[index - 1].created > showTimeLimit
-      : false,
+    showTime:
+      item.created - (array[index - 1]?.created || Date.now()) > showTimeLimit,
   }));
 });
 </script>
