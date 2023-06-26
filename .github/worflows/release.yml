@@ -1,0 +1,24 @@
+name: Release
+on:
+  push:
+    tags:
+      - *
+jobs:
+  exclude:
+    labels:
+      - Merge
+  changelog:
+    categories:
+      - title: Features
+        labels:
+          - feat
+      - title: Fixes
+        labels:
+          - fix
+      - title: Improve
+        labels:
+          - refactor
+          - improve
+      - title: Other
+        labels:
+          - "*"
