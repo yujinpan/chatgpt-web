@@ -3,9 +3,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { resolve } from 'path';
 import { resolveWithAlias } from 'path-ops';
 import { defineConfig } from 'vite';
+import vitePluginGA from 'vite-plugin-ga';
 
 import pkg from './package.json';
-import vitePluginGA from './vite-plugin-ga';
 import vitePluginObf from './vite-plugin-obf';
 
 const alias = {
@@ -25,7 +25,9 @@ export default defineConfig({
         'src/utils/interceptor',
       ],
     }),
-    vitePluginGA(),
+    vitePluginGA({
+      id: 'G-S66MPLRFJZ',
+    }),
   ],
   server: {
     proxy: {
