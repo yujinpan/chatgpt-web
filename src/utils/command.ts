@@ -4,6 +4,7 @@ import { appStore } from './store';
 import { BUILD, GPT_MODEL } from '../config';
 
 export enum COMMAND {
+  GEMINI1_5 = '/gemini1_5',
   GPT4 = '/gpt-4',
   GPT3_5 = '/gpt-3.5-turbo',
   CLEAR = '/clear',
@@ -13,6 +14,7 @@ export enum COMMAND {
 }
 
 export const COMMANDS: Record<COMMAND, () => void | Promise<string>> = {
+  [COMMAND.GEMINI1_5]: () => handleChangeModel(GPT_MODEL.GEMINI1_5),
   [COMMAND.GPT4]: () => handleChangeModel(GPT_MODEL.GPT4),
   [COMMAND.GPT3_5]: () => handleChangeModel(GPT_MODEL.GPT3_5),
   [COMMAND.VERSION]: () => {

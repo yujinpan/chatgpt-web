@@ -17,6 +17,7 @@
     "encrypt": "node scripts/encrypt.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.11.4",
     "crypto-js": "^4.1.1",
     "lodash": "^4.17.21",
     "rxjs": "^7.8.1",

@@ -1,3 +1,4 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import throttle from 'lodash/throttle';
 import { nextTick, onMounted, provide, reactive, ref, watch } from 'vue';
 
@@ -23,8 +24,9 @@ import {
 import { localDataMessages } from './utils/local-data';
 import { generateStartMsg } from './utils/messages';
 import { appStore, UPDATE_SCROLL_INJECT_KEY } from './utils/store';
+import { getSecretKey } from '@/utils/secret';
 
-export function useChat(chatInput: Ref<ChatInput>) {
+export function useChat(chatInput: Ref<typeof ChatInput>) {
   const messages = ref<ChatData[]>(initMessages());
   const loading = ref(false);
 
@@ -79,6 +81,14 @@ export function useChat(chatInput: Ref<ChatInput>) {
 }
 
 async function requestChat(chatData: ChatData[]): Promise<ChatData> {
+  if (appStore.model.toLowerCase().includes('gemini')) {
+    return requestChatGemini(chatData);
+  } else {
+    return requestChatCPT(chatData);
+  }
+}
+
+async function requestChatCPT(chatData: ChatData[]): Promise<ChatData> {
   const lastMsg = chatData[chatData.length - 1]?.content.slice(
     0,
     GPT_MSG_MAX_LEN,
@@ -117,6 +127,58 @@ async function requestChat(chatData: ChatData[]): Promise<ChatData> {
     },
     (e) => createChatData(`Error: ${e}`),
   );
+}
+
+let genAI;
+async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
+  const lastMsg = chatData[chatData.length - 1].content;
+
+  const interceptorsResult = await useMsgInterceptors(lastMsg, [
+    msgInterceptorCommand,
+    // msgInterceptorValidate,
+  ]).catch((e) => {
+    return createChatData(`Error: ${e}`);
+  });
+  if (interceptorsResult) {
+    return interceptorsResult;
+  }
+
+  const chatAPIMessages = getChatAPIMessages(chatData);
+
+  genAI = genAI || new GoogleGenerativeAI(getSecretKey());
+  const model = genAI.getGenerativeModel({ model: appStore.model });
+  const history = chatAPIMessages.slice(0, -1);
+  const chat = model.startChat({
+    history: history.map((item) => ({
+      role: item.role,
+      parts: [{ text: item.content }],
+    })),
+  });
+
+  const result = await chat
+    .sendMessageStream(lastMsg)
+    .catch((e) => createChatData(`Error: ${e}`));
+
+  const chatDataRes = reactive({
+    ...createChatData('', ChatRole.MODEL),
+    typing: true,
+  });
+
+  const process = async () => {
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      chatDataRes.content += chunkText;
+    }
+  };
+  process()
+    .catch((err) => {
+      chatDataRes.content += String(err);
+    })
+    .finally(() => {
+      chatDataRes.typing = false;
+    });
+
+  return chatDataRes;
 }
 
 function initMessages(): ChatData[] {

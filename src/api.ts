@@ -4,7 +4,7 @@ import request from './utils/request';
 import { getSecretKeyHeaders } from './utils/secret';
 
 export type ChatAPIMessage = {
-  role: ChatRole.USER | ChatRole.SYSTEM | ChatRole.ASSISTANT;
+  role: ChatRole.USER | ChatRole.SYSTEM | ChatRole.ASSISTANT | ChatRole.MODEL;
   content: string;
 };
 

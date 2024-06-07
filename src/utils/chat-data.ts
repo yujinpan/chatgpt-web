@@ -6,6 +6,7 @@ export enum ChatRole {
   ASSISTANT = 'assistant',
   VISITOR = 'visitor',
   COMMAND = 'command',
+  MODEL = 'model',
 }
 
 export type ChatData = {
@@ -25,7 +26,12 @@ export function createChatData(content: string, role?: ChatRole): ChatData {
 }
 
 export function isChatAPIRole(role: ChatRole) {
-  return [ChatRole.USER, ChatRole.SYSTEM, ChatRole.ASSISTANT].includes(role);
+  return [
+    ChatRole.USER,
+    ChatRole.SYSTEM,
+    ChatRole.ASSISTANT,
+    ChatRole.MODEL,
+  ].includes(role);
 }
 
 export function getChatAPIMessages(data: ChatData[]): ChatAPIMessage[] {
