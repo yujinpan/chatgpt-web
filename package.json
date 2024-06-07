@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-web",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "yujinpan",
   "scripts": {
     "start": "npm run dev",
