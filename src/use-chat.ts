@@ -155,9 +155,15 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
     })),
   });
 
+  let error: ChatData;
+
   const result = await chat
     .sendMessageStream(lastMsg)
-    .catch((e) => createChatData(`Error: ${e}`));
+    .catch((e) => (error = createChatData(e)));
+
+  if (error) {
+    return error;
+  }
 
   const chatDataRes = reactive({
     ...createChatData('', ChatRole.MODEL),
