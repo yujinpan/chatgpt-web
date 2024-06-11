@@ -17,6 +17,7 @@ Commands:
 - \`${COMMAND.GEMINI1_5}\` use ${GPT_MODEL.GEMINI1_5} model
 - \`${COMMAND.GPT4}\` use ${GPT_MODEL.GPT4} model
 - \`${COMMAND.GPT3_5}\` use ${GPT_MODEL.GPT3_5} model
+- \`${COMMAND.SCENE}\` use special scene, ep: \`/scene WayneCorp DC\`
 - \`${COMMAND.CLEAR}\` clear history
 - \`${COMMAND.ISSUE}\` report issue
 - \`${COMMAND.VERSION}\` show version

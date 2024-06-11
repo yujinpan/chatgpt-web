@@ -5,6 +5,7 @@ export enum ChatRole {
   USER = 'user',
   ASSISTANT = 'assistant',
   VISITOR = 'visitor',
+  PROMPT = 'prompt',
   COMMAND = 'command',
   MODEL = 'model',
 }
@@ -31,6 +32,7 @@ export function isChatAPIRole(role: ChatRole) {
     ChatRole.SYSTEM,
     ChatRole.ASSISTANT,
     ChatRole.MODEL,
+    ChatRole.PROMPT,
   ].includes(role);
 }
 
@@ -38,7 +40,7 @@ export function getChatAPIMessages(data: ChatData[]): ChatAPIMessage[] {
   return (
     data.filter((item) => isChatAPIRole(item.role)) as ChatAPIMessage[]
   ).map((item) => ({
-    role: item.role,
+    role: item.role === ChatRole.PROMPT ? ChatRole.USER : item.role,
     content: item.content,
   }));
 }

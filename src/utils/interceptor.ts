@@ -2,7 +2,7 @@ import type { ChatData } from './chat-data';
 
 import { validateActivationCode } from './auth';
 import { createChatData } from './chat-data';
-import { COMMANDS, getCommand } from './command';
+import { COMMANDS, getCommand, getCommandArgs } from './command';
 
 interface MsgInterceptor {
   (msg: string): void | undefined | Promise<ChatData | void | undefined>;
@@ -27,7 +27,7 @@ export const msgInterceptorCommand: MsgInterceptor = (msg: string) => {
   const command = getCommand(msg);
   if (command) {
     if (command in COMMANDS) {
-      const result = COMMANDS[command]();
+      const result = COMMANDS[command](getCommandArgs(msg));
       if (result) {
         return result.then(createChatData, createChatData);
       }

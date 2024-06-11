@@ -1,4 +1,8 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import {
+  GoogleGenerativeAI,
+  HarmBlockThreshold,
+  HarmCategory,
+} from '@google/generative-ai';
 import throttle from 'lodash/throttle';
 import { nextTick, onMounted, provide, reactive, ref, watch } from 'vue';
 
@@ -7,7 +11,7 @@ import type { ChatData } from './utils/chat-data';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { GPT_MSG_MAX_LEN } from './config';
+import { GPT_MSG_MAX_LEN, SCENE_TEMP } from './config';
 import {
   ChatRole,
   createChatData,
@@ -143,10 +147,24 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
     return interceptorsResult;
   }
 
+  interceptorPrompt(chatData);
+
   const chatAPIMessages = getChatAPIMessages(chatData);
+  const lastAPIMsg = chatAPIMessages[chatAPIMessages.length - 1].content;
 
   genAI = genAI || new GoogleGenerativeAI(getSecretKey());
-  const model = genAI.getGenerativeModel({ model: appStore.model });
+  const model = genAI.getGenerativeModel({
+    model: appStore.model,
+    safetySettings: [
+      HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+      HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+      HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+      HarmCategory.HARM_CATEGORY_HARASSMENT,
+    ].map((key) => ({
+      category: HarmCategory[key],
+      threshold: HarmBlockThreshold.BLOCK_NONE,
+    })),
+  });
   const history = chatAPIMessages.slice(0, -1);
   const chat = model.startChat({
     history: history.map((item) => ({
@@ -158,7 +176,7 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
   let error: ChatData;
 
   const result = await chat
-    .sendMessageStream(lastMsg)
+    .sendMessageStream(lastAPIMsg)
     .catch((e) => (error = createChatData(e)));
 
   if (error) {
@@ -194,4 +212,31 @@ function initMessages(): ChatData[] {
 
 function getRole(msg: string) {
   return isCommand(msg) ? ChatRole.COMMAND : ChatRole.USER;
+}
+
+function interceptorPrompt(chatData: ChatData[]) {
+  switch (appStore.scene.status) {
+    case 'coming-in':
+      appStore.sceneIn();
+      chatData.push(
+        createChatData(
+          SCENE_TEMP(appStore.scene.name) + 'Now, an opening statement.',
+          ChatRole.PROMPT,
+        ),
+      );
+      break;
+    case 'coming-out':
+      appStore.sceneOut();
+      chatData.push(createChatData('I am leaving.', ChatRole.PROMPT));
+      break;
+    case 'in':
+      break;
+    case 'out':
+      for (let i = chatData.length - 1; i >= 0; i--) {
+        if (chatData[i].role === ChatRole.PROMPT) {
+          chatData.splice(i, 1);
+        }
+      }
+      break;
+  }
 }

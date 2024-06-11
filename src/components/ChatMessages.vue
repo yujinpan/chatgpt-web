@@ -36,28 +36,30 @@ const props = defineProps<{
 const visibleData = computed(() => {
   const showTimeLimit = 10 * 60 * 1000;
   let previousTime;
-  return props.data.map((item, index) => {
-    let showTime: boolean;
-    if (index === 0) {
-      showTime = Date.now() - item.created > showTimeLimit;
-      previousTime = item.created;
-    } else {
-      showTime = item.created - previousTime > showTimeLimit;
-      if (showTime) {
+  return props.data
+    .filter((item) => item.role !== ChatRole.PROMPT)
+    .map((item, index) => {
+      let showTime: boolean;
+      if (index === 0) {
+        showTime = Date.now() - item.created > showTimeLimit;
         previousTime = item.created;
+      } else {
+        showTime = item.created - previousTime > showTimeLimit;
+        if (showTime) {
+          previousTime = item.created;
+        }
       }
-    }
 
-    return {
-      ...item,
-      id: item.created,
-      isRight: [ChatRole.USER, ChatRole.VISITOR, ChatRole.COMMAND].includes(
-        item.role,
-      ),
-      created: formatDate(item.created),
-      showTime,
-    };
-  });
+      return {
+        ...item,
+        id: item.created,
+        isRight: [ChatRole.USER, ChatRole.VISITOR, ChatRole.COMMAND].includes(
+          item.role,
+        ),
+        created: formatDate(item.created),
+        showTime,
+      };
+    });
 });
 </script>
 
