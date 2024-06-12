@@ -1,3 +1,10 @@
+## [0.0.9](https://github.com/yujinpan/chatgpt-web/compare/v0.0.8...v0.0.9) (2024-06-12)
+
+### Features
+
+- integrate command in message ([271a999](https://github.com/yujinpan/chatgpt-web/commit/271a9995428b2289906d88a98ca6c9caa5f175b2))
+- optimize prompt ([a1ea6f2](https://github.com/yujinpan/chatgpt-web/commit/a1ea6f29fe1681175ad716b24ba4a8e145853ba5))
+
 ## [0.0.8](https://github.com/yujinpan/chatgpt-web/compare/v0.0.7...v0.0.8) (2024-06-11)
 
 ### Features
