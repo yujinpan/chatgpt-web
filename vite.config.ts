@@ -2,8 +2,8 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { resolve } from 'path';
 import { resolveWithAlias } from 'path-ops';
-import { defineConfig } from 'vite';
 import vitePluginGA from 'vite-plugin-ga';
+import { defineConfig } from 'vitest/config';
 
 import pkg from './package.json';
 import vitePluginObf from './vite-plugin-obf';
@@ -66,5 +66,8 @@ export default defineConfig({
       version: pkg.version,
       dateTime: new Date().toLocaleString(),
     }),
+  },
+  test: {
+    environment: 'jsdom',
   },
 });

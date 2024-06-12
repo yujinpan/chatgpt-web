@@ -18,7 +18,12 @@ import {
   getChatAPIMessages,
 } from './utils/chat-data';
 import { readStreamJSONContent, streamToObservable } from './utils/chat-stream';
-import { COMMAND, getCommand, isCommand } from './utils/command';
+import {
+  COMMAND,
+  getCommand,
+  getCommandUseChat,
+  isCommand,
+} from './utils/command';
 import { scrollToBottom } from './utils/dom';
 import {
   msgInterceptorCommand,
@@ -28,11 +33,14 @@ import {
 import { localDataMessages } from './utils/local-data';
 import { generateStartMsg } from './utils/messages';
 import { appStore, UPDATE_SCROLL_INJECT_KEY } from './utils/store';
+import { chatDataToHistory } from '@/utils/gemini';
 import { getSecretKey } from '@/utils/secret';
 
 export function useChat(chatInput: Ref<typeof ChatInput>) {
-  const messages = ref<ChatData[]>(initMessages());
+  const messages = ref<ChatData[]>([]);
   const loading = ref(false);
+
+  initMessages().then((res) => (messages.value = res));
 
   const sendMsg = (msg: string) => {
     messages.value.push(createChatData(msg, getRole(msg)));
@@ -107,6 +115,11 @@ async function requestChatCPT(chatData: ChatData[]): Promise<ChatData> {
     return interceptorsResult;
   }
 
+  const chatCommandResult = await useChatCommand(chatData);
+  if (chatCommandResult) {
+    return chatCommandResult;
+  }
+
   return chatCompletions({
     model: appStore.model,
     messages: getChatAPIMessages(chatData),
@@ -134,8 +147,10 @@ async function requestChatCPT(chatData: ChatData[]): Promise<ChatData> {
 }
 
 let genAI;
+let commandTime: number;
 async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
-  const lastMsg = chatData[chatData.length - 1].content;
+  const lastChatData = chatData[chatData.length - 1];
+  const lastMsg = lastChatData.content;
 
   const interceptorsResult = await useMsgInterceptors(lastMsg, [
     msgInterceptorCommand,
@@ -147,8 +162,15 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
     return interceptorsResult;
   }
 
+  const chatCommandResult = await useChatCommand(chatData);
+  if (chatCommandResult) {
+    return chatCommandResult;
+  }
+
+  // will change chatData
   interceptorPrompt(chatData);
 
+  // re-get last msg
   const chatAPIMessages = getChatAPIMessages(chatData);
   const lastAPIMsg = chatAPIMessages[chatAPIMessages.length - 1].content;
 
@@ -165,12 +187,8 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
       threshold: HarmBlockThreshold.BLOCK_NONE,
     })),
   });
-  const history = chatAPIMessages.slice(0, -1);
   const chat = model.startChat({
-    history: history.map((item) => ({
-      role: item.role,
-      parts: [{ text: item.content }],
-    })),
+    history: chatDataToHistory(chatAPIMessages.slice(0, -1)),
   });
 
   let error: ChatData;
@@ -205,9 +223,11 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
   return chatDataRes;
 }
 
-function initMessages(): ChatData[] {
+async function initMessages(): Promise<ChatData[]> {
   const localData = localDataMessages.get();
-  return localData?.length ? localData : [createChatData(generateStartMsg())];
+  return localData?.length
+    ? localData
+    : [createChatData(await generateStartMsg())];
 }
 
 function getRole(msg: string) {
@@ -238,5 +258,40 @@ function interceptorPrompt(chatData: ChatData[]) {
         }
       }
       break;
+  }
+}
+
+async function useChatCommand(chatData: ChatData[]) {
+  const last = chatData[chatData.length - 1];
+  const commandOrMsg = await getCommandUseChat(
+    last.content,
+    commandTime
+      ? chatDataToHistory(
+          getChatAPIMessages(
+            chatData.filter((item) => item.created >= commandTime),
+          ),
+        )
+      : undefined,
+  );
+  if (commandOrMsg !== '-1') {
+    if (isCommand(commandOrMsg)) {
+      commandTime = null;
+      if (commandOrMsg === COMMAND.CLEAR) {
+        chatData.length = 0;
+      }
+      const interceptorsResult = await useMsgInterceptors(commandOrMsg, [
+        msgInterceptorCommand,
+      ]).catch((e) => {
+        return createChatData(`Error: ${e}`);
+      });
+      if (interceptorsResult) {
+        return interceptorsResult;
+      }
+    } else {
+      commandTime = commandTime || last.created;
+      return createChatData(commandOrMsg, ChatRole.MODEL);
+    }
+  } else {
+    commandTime = null;
   }
 }
