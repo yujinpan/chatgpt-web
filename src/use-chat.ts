@@ -220,7 +220,7 @@ function interceptorPrompt(chatData: ChatData[]) {
       appStore.sceneIn();
       chatData.push(
         createChatData(
-          SCENE_TEMP(appStore.scene.name) + 'Now, an opening statement.',
+          SCENE_TEMP(appStore.scene.name) + 'Now, i am here.',
           ChatRole.PROMPT,
         ),
       );

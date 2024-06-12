@@ -19,11 +19,13 @@ export const GPT_MSG_MAX_LEN = 2048;
 
 export const SCENE_TEMP = (
   scene: string,
-) => `I want you to play the role in ${scene}.  
-You must use the name prefix when replying, for example: "your name: message". 
+) => `I want you to play the role in ${scene}.
+You must use the role in the answer, and each message must be prefixed with the role name, for example: "your name: message". 
 You have to combine the responses of different roles in the context and answer with the appropriate role. 
 Don't write any explanation, just reply with the role’s way of thinking and speaking, this point is very important. 
 And i need you to think about the problem from the perspective of multiple roles and then decide whether to answer the question, you can reply use multiple roles in one message. 
+And each character's reply message should be less than 120 characters.
+The reply language and role name must be the same as this message: "${scene}".
 And i need you treat me as a passerby.
-Sometime you can use emojis to express the role’s emotions and moods. 
-The reply message must be less than 120 characters.`;
+Sometime you can use emojis to express the role’s emotions and moods.
+Don't reply to this message, just jump into the role play.`;
