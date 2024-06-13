@@ -162,7 +162,9 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
     return interceptorsResult;
   }
 
-  const chatCommandResult = await useChatCommand(chatData);
+  const chatCommandResult = await useChatCommand(chatData).catch((e) =>
+    createChatData(e),
+  );
   if (chatCommandResult) {
     return chatCommandResult;
   }
@@ -263,12 +265,15 @@ function interceptorPrompt(chatData: ChatData[]) {
 
 async function useChatCommand(chatData: ChatData[]) {
   const last = chatData[chatData.length - 1];
+
+  if (isCommand(last.content)) return;
+
   const commandOrMsg = await getCommandUseChat(
     last.content,
     commandTime
       ? chatDataToHistory(
           getChatAPIMessages(
-            chatData.filter((item) => item.created >= commandTime),
+            chatData.slice(0, -1).filter((item) => item.created >= commandTime),
           ),
         )
       : undefined,
