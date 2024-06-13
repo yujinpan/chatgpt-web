@@ -1,0 +1,21 @@
+:root {
+  --cw-font-color: rgb(17, 17, 17);
+  --cw-font-color-secondary: rgb(119, 119, 119);
+  --cw-border-color: rgb(185, 185, 185);
+  --cw-bg-color: rgb(228 228 228);
+  --cw-bg-color-base: rgb(222 222 222);
+  --cw-bg-color-overlay: rgb(216 216 216);
+  --cw-shadow-color: rgb(185, 185, 185);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cw-font-color: rgb(238, 238, 238);
+    --cw-font-color-secondary: rgb(136, 136, 136);
+    --cw-border-color: rgb(70, 70, 70);
+    --cw-bg-color: rgb(27 27 27);
+    --cw-bg-color-base: rgb(33 33 33);
+    --cw-bg-color-overlay: rgb(39 39 39);
+    --cw-shadow-color: rgb(70, 70, 70);
+  }
+}

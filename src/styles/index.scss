@@ -1,9 +1,12 @@
 @use './common-variables.scss' as *;
+@use 'var';
 @use "base";
 @use "public";
 
-html.dark {
-  color-scheme: dark;
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
 }
 
 body {

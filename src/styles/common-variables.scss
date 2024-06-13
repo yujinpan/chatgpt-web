@@ -1,5 +1,5 @@
-$font-color: rgba(255, 255, 255, .87);
-$font-color-secondary: #888;
+$font-color: var(--cw-font-color);
+$font-color-secondary: var(--cw-font-color-secondary);
 $font-size: 16px;
 
 $spacing-base: 8px;
@@ -10,10 +10,10 @@ $transition-base: all 0.3s;
 $transition-base-ease-out: all 0.3s ease-out;
 
 $border-radius: 6px;
-$border-color: rgb(70 70 70);
+$border-color: var(--cw-border-color);
 
-$bg-color: rgb(27 27 27);
-$bg-color-base: rgb(33 33 33);
-$bg-color-overlay: rgb(39 39 39);
+$bg-color: var(--cw-bg-color);
+$bg-color-base: var(--cw-bg-color-base);
+$bg-color-overlay: var(--cw-bg-color-overlay);
 
-$box-shadow: 0px 0px 1px 1px rgba(255,255,255,0.1);
+$box-shadow: 0px 0px 1px 1px var(--cw-shadow-color);
