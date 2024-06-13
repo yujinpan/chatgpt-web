@@ -32,7 +32,7 @@ const { messages, sendMsg, loading } = useChat();
   margin: 0 auto;
 
   &__spacer {
-    margin-top: $inputHeight + $spacing-medium * 2;
+    margin-top: $inputHeight;
   }
 
   .chat-input {

@@ -1,0 +1,22 @@
+@use "sass:meta";
+@use '@/styles/common-variables.scss' as *;
+@use '@/styles/var';
+@use "@/styles/base";
+@use "@/styles/public";
+
+.web-kit {
+  font-family: Quotes, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $font-color;
+  font-size: $font-size - 2px;
+  
+  .markdown-body {
+    font-size: inherit;
+    color-scheme: inherit;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
