@@ -69,6 +69,12 @@ const toggle = async () => {
   &__button {
     width: 5em;
     height: 3em;
+    border: 1px solid $border-color;
+    box-shadow: 0 0 6px 1px var(--cw-shadow-color);
+    background-color: $bg-color-overlay;
+    &:active {
+      border-color: $bg-color-overlay;
+    }
   }
 
   .chat-container {
