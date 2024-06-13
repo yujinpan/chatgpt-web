@@ -1,6 +1,6 @@
 <template>
   <div class="web-kit">
-    <button @click="toggle">Chat</button>
+    <button class="web-kit__button" @click="toggle">Chat</button>
     <div v-if="chatVisible" class="chat-container">
       <div class="flex-center text-secondary full" v-if="loading">
         Loading...
@@ -63,8 +63,13 @@ const toggle = async () => {
 .web-kit {
   position: fixed;
   z-index: 3000;
-  bottom: $spacing-base;
-  right: $spacing-base;
+  bottom: $spacing-medium;
+  right: $spacing-medium;
+
+  &__button {
+    width: 5em;
+    height: 3em;
+  }
 
   .chat-container {
     position: absolute;
@@ -72,6 +77,7 @@ const toggle = async () => {
     height: 500px;
     bottom: 100%;
     right: 0;
+    margin-bottom: $spacing-base;
     background-color: $bg-color-overlay;
     overflow: hidden;
     border-radius: $border-radius;
