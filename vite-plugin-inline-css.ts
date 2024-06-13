@@ -19,6 +19,12 @@ const vitePluginInlineCss = (options: {
     }
     delete bundle[options.cssFilename];
   },
+  transformIndexHtml(html) {
+    return html.replace(
+      '<link rel="stylesheet" crossorigin href="https://yujinpan.github.io/chatgpt-web/webkit.css">\n    ',
+      '',
+    );
+  },
 });
 
 export default vitePluginInlineCss;

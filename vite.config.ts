@@ -15,7 +15,7 @@ const alias = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
+  base: 'https://yujinpan.github.io/chatgpt-web/',
   plugins: [
     vue(),
     vueJsx(),
@@ -73,6 +73,7 @@ export default defineConfig({
     }),
   },
   build: {
+    modulePreload: false,
     rollupOptions: {
       output: {
         manualChunks(id) {
