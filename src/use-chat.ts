@@ -1,14 +1,8 @@
-import {
-  GoogleGenerativeAI,
-  HarmBlockThreshold,
-  HarmCategory,
-} from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import throttle from 'lodash/throttle';
-import { nextTick, onMounted, provide, reactive, ref, watch } from 'vue';
+import { onMounted, provide, reactive, ref, watch } from 'vue';
 
-import type ChatInput from './components/ChatInput.vue';
 import type { ChatData } from './utils/chat-data';
-import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
 import {
@@ -28,7 +22,6 @@ import {
   getCommandUseChat,
   isCommand,
 } from './utils/command';
-import { scrollToBottom } from './utils/dom';
 import {
   msgInterceptorCommand,
   msgInterceptorValidate,
@@ -40,7 +33,7 @@ import { appStore, UPDATE_SCROLL_INJECT_KEY } from './utils/store';
 import { chatDataToHistory } from '@/utils/gemini';
 import { getSecretKey } from '@/utils/secret';
 
-export function useChat(chatInput: Ref<typeof ChatInput>) {
+export function useChat() {
   const messages = ref<ChatData[]>([]);
   const loading = ref(false);
 
@@ -61,10 +54,9 @@ export function useChat(chatInput: Ref<typeof ChatInput>) {
       .finally(() => (loading.value = false));
   };
 
-  const updateScroll = throttle(async (immediate: boolean) => {
-    await nextTick(() => {
-      scrollToBottom(chatInput.value.$el.clientHeight, immediate);
-    });
+  const updateScroll = throttle(() => {
+    const spacer = document.querySelector('.app__spacer');
+    spacer?.scrollIntoView({ behavior: 'smooth' });
   }, 100);
 
   provide(UPDATE_SCROLL_INJECT_KEY, updateScroll);
@@ -86,7 +78,7 @@ export function useChat(chatInput: Ref<typeof ChatInput>) {
   );
 
   onMounted(() => {
-    updateScroll(true);
+    updateScroll();
   });
 
   return {
