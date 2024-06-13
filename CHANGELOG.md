@@ -1,3 +1,20 @@
+## [0.0.10](https://github.com/yujinpan/chatgpt-web/compare/v0.0.9...v0.0.10) (2024-06-13)
+
+### Bug Fixes
+
+- change button styles ([6f330ba](https://github.com/yujinpan/chatgpt-web/commit/6f330bacca7466f23533a5ffa2730df2a1ff38d2))
+- error message type incorrect ([98486b9](https://github.com/yujinpan/chatgpt-web/commit/98486b93e9de0f78f088ac65dcace21f4ed99e32))
+- ignore other session ([94ee7af](https://github.com/yujinpan/chatgpt-web/commit/94ee7af449888ec7e966875ed0aadb2a9033f1e3))
+- model error not catch ([ff49bbd](https://github.com/yujinpan/chatgpt-web/commit/ff49bbd88d88d62951194a95c999d41ffe9fbed7))
+- use same safety settings and fix prompts ([87ce451](https://github.com/yujinpan/chatgpt-web/commit/87ce45193d4f9b79eb9072b10c62d55c7a2afcec))
+- use spacer instead of padding ([31a33c3](https://github.com/yujinpan/chatgpt-web/commit/31a33c3b6fd908b6813ea9cb671b3bb4c2c3687d))
+
+### Features
+
+- add chat webkit ([a88378c](https://github.com/yujinpan/chatgpt-web/commit/a88378c6e4669b25fdd87ae0fd465cba3ef323e0))
+- add webkit package ([6555f4f](https://github.com/yujinpan/chatgpt-web/commit/6555f4ffc4f8ec4ae5635ddd35e9f5949ee59b20))
+- support dark/light ([134368c](https://github.com/yujinpan/chatgpt-web/commit/134368cf98a21f6c4720a4ad848f76a79a372088))
+
 ## [0.0.9](https://github.com/yujinpan/chatgpt-web/compare/v0.0.8...v0.0.9) (2024-06-12)
 
 ### Features
