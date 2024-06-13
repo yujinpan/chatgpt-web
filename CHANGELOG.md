@@ -1,3 +1,10 @@
+## [0.0.11](https://github.com/yujinpan/chatgpt-web/compare/v0.0.10...v0.0.11) (2024-06-13)
+
+### Bug Fixes
+
+- button styles ([928c3e9](https://github.com/yujinpan/chatgpt-web/commit/928c3e9ff7dae24ab977c0594e36a48e0d10a1cd))
+- extract common chunk ([a806f2d](https://github.com/yujinpan/chatgpt-web/commit/a806f2d3254d03cbd1ea52b572ecb530862af5ee))
+
 ## [0.0.10](https://github.com/yujinpan/chatgpt-web/compare/v0.0.9...v0.0.10) (2024-06-13)
 
 ### Bug Fixes
