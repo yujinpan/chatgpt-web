@@ -11,7 +11,11 @@ import type { ChatData } from './utils/chat-data';
 import type { Ref } from 'vue';
 
 import { chatCompletions } from './api';
-import { GPT_MSG_MAX_LEN, SCENE_TEMP } from './config';
+import {
+  GEMINI_SAFETY_SETTINGS_NONE,
+  GPT_MSG_MAX_LEN,
+  SCENE_TEMP,
+} from './config';
 import {
   ChatRole,
   createChatData,
@@ -177,15 +181,7 @@ async function requestChatGemini(chatData: ChatData[]): Promise<ChatData> {
   genAI = genAI || new GoogleGenerativeAI(getSecretKey());
   const model = genAI.getGenerativeModel({
     model: appStore.model,
-    safetySettings: [
-      HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-      HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-      HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      HarmCategory.HARM_CATEGORY_HARASSMENT,
-    ].map((key) => ({
-      category: HarmCategory[key],
-      threshold: HarmBlockThreshold.BLOCK_NONE,
-    })),
+    safetySettings: GEMINI_SAFETY_SETTINGS_NONE,
   });
   const chat = model.startChat({
     history: chatDataToHistory(chatAPIMessages.slice(0, -1)),
