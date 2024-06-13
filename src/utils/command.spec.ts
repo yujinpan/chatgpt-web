@@ -30,4 +30,11 @@ describe('command', () => {
       '/scene WayneCorp DC',
     );
   });
+
+  it('should getCommandUseChat other', async () => {
+    expect(await getCommandUseChat('how are you')).toBe('-1');
+    expect(
+      await getCommandUseChat('who is the best between you and musk'),
+    ).toBe('-1');
+  });
 });
