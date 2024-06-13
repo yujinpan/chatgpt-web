@@ -1,9 +1,10 @@
 import { createApp } from 'vue';
 
-import App from './App.vue';
+import { ChatApp } from '@/App-dynamic';
+
 import './styles/index.scss';
 
-createApp(App).mount('#app');
+createApp(ChatApp).mount('#chatgpt-web');
 
 // just make a webkit package
 window['ChatGPIWebKit'] = () => import('../web-kit/main');
