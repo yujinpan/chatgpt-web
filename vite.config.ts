@@ -6,6 +6,7 @@ import vitePluginGA from 'vite-plugin-ga';
 import { defineConfig } from 'vitest/config';
 
 import pkg from './package.json';
+import vitePluginInlineCss from './vite-plugin-inline-css';
 import vitePluginObf from './vite-plugin-obf';
 
 const alias = {
@@ -27,6 +28,10 @@ export default defineConfig({
     }),
     vitePluginGA({
       id: 'G-S66MPLRFJZ',
+    }),
+    vitePluginInlineCss({
+      jsFilename: 'webkit.js',
+      cssFilename: 'webkit.css',
     }),
   ],
   server: {
@@ -66,6 +71,23 @@ export default defineConfig({
       version: pkg.version,
       dateTime: new Date().toLocaleString(),
     }),
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('web-kit/main')) {
+            return 'webkit';
+          }
+        },
+        assetFileNames(chunkInfo) {
+          return chunkInfo.name;
+        },
+        chunkFileNames(chunkInfo) {
+          return chunkInfo.name + '.js';
+        },
+      },
+    },
   },
   test: {
     environment: 'jsdom',
