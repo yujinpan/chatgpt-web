@@ -85,7 +85,7 @@ const toggle = async () => {
     bottom: 100%;
     right: 0;
     margin-bottom: $spacing-base;
-    background-color: $bg-color-overlay;
+    background-color: $bg-color;
     overflow: hidden;
     border-radius: $border-radius;
     box-shadow: 0 0 6px 1px var(--cw-shadow-color);
