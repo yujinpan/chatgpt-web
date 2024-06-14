@@ -1,3 +1,11 @@
+## [0.0.12](https://github.com/yujinpan/chatgpt-web/compare/v0.0.11...v0.0.12) (2024-06-14)
+
+### Bug Fixes
+
+- duplicate code ([16db1d4](https://github.com/yujinpan/chatgpt-web/commit/16db1d439b240c9976f063b5b99ec00b9a46ac3c))
+- overflow in mobile ([1a6d980](https://github.com/yujinpan/chatgpt-web/commit/1a6d980023c5fb66aa22bc59c9ac01197f4fb314))
+- webkit styles ([450b7ab](https://github.com/yujinpan/chatgpt-web/commit/450b7ab950655f194f8c51aa88b94b3746567bd3))
+
 ## [0.0.11](https://github.com/yujinpan/chatgpt-web/compare/v0.0.10...v0.0.11) (2024-06-13)
 
 ### Bug Fixes
