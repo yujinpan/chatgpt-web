@@ -77,7 +77,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('web-kit/main')) {
+          if (id.includes('webkit/main')) {
             return 'webkit';
           }
         },
