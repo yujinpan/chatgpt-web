@@ -7,4 +7,4 @@ import './styles/index.scss';
 createApp(ChatApp).mount('#chatgpt-web');
 
 // just make a webkit package
-window['ChatGPIWebKit'] = () => import('../web-kit/main');
+window['ChatGPIWebKit'] = () => import('../webkit/main');
