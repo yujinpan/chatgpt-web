@@ -79,6 +79,7 @@ const toggle = async () => {
 
   .chat-container {
     position: absolute;
+    max-width: calc(100vw);
     width: 400px;
     height: 500px;
     bottom: 100%;
