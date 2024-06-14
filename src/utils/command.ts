@@ -104,13 +104,17 @@ export function isCommand(msg: string): msg is COMMAND {
 
 export function getCommandUseChat(msg: string, history: Content[] = []) {
   const prompt = `Commands: ${JSON.stringify(COMMANDS_DESC)}
-If i want to get help for command and have to contains "command" and "help" keywords, you can describe the summary and contains a Welcome header for use the app.
-The description content does not contain command codes and is described using semantic text.
+
+If i want to get help for command and have to contains "command" and "help" keywords, 
+you can briefly introduce what functions and contains a Welcome header for use the app,
+and the introduction must use semantic text and not contain any command code.
+
 If the session not related to any command, return -1, skip other conditions.
 If i has not intention to use any command, return -1, skip other conditions.
 If i has intention to use any command, return command without quote if it is completely, otherwise you must briefly describe the incorrect reason.
 If the command requires parameters, you need to verify the parameters and give appropriate prompts.
 If the command requires confirmation, you need to write confirm content to the user.
+
 For example: 
   i: change model
   you: what model do you want? (show suggest)
