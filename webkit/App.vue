@@ -14,11 +14,10 @@
 </template>
 
 <script lang="tsx" setup>
-import { defineAsyncComponent, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 import { loadModules } from './modules';
-
-const ChatApp = defineAsyncComponent(() => import('@/App.vue'));
+import { ChatApp } from '@/App-dynamic';
 
 const chatVisible = ref(false);
 
