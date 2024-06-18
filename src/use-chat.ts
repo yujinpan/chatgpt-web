@@ -215,7 +215,7 @@ async function initMessages(): Promise<ChatData[]> {
   const localData = localDataMessages.get();
   return localData?.length
     ? localData
-    : [createChatData(await generateStartMsg())];
+    : [createChatData(await generateStartMsg().catch((e) => String(e)))];
 }
 
 function getRole(msg: string) {
