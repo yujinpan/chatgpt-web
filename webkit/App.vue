@@ -78,7 +78,7 @@ const toggle = async () => {
 
   .chat-container {
     position: absolute;
-    max-width: calc(100vw);
+    max-width: calc(100vw - $spacing-medium * 2);
     width: 400px;
     height: 500px;
     bottom: 100%;
