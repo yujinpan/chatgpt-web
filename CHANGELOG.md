@@ -1,3 +1,11 @@
+## [0.0.14](https://github.com/yujinpan/chatgpt-web/compare/v0.0.13...v0.0.14) (2024-07-04)
+
+### Bug Fixes
+
+- chat box overflow in mobile ([239b1df](https://github.com/yujinpan/chatgpt-web/commit/239b1df26e64e112a160545967b4cb3dbfd51971))
+- init message error not catch ([526d0fb](https://github.com/yujinpan/chatgpt-web/commit/526d0fb9a45367a498289376e45c452f75604dab))
+- should show chat when loaded first ([7f02bdb](https://github.com/yujinpan/chatgpt-web/commit/7f02bdb286f2f8c2055f6477f77786d6d4d11cd3))
+
 ## [0.0.13](https://github.com/yujinpan/chatgpt-web/compare/v0.0.12...v0.0.13) (2024-06-14)
 
 ## [0.0.12](https://github.com/yujinpan/chatgpt-web/compare/v0.0.11...v0.0.12) (2024-06-14)
