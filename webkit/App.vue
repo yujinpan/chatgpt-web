@@ -5,7 +5,7 @@
       <div class="flex-center text-secondary full" v-if="loading">
         Loading...
       </div>
-      <div class="full" style="overflow: auto">
+      <div v-if="loaded" class="full" style="overflow: auto">
         <ChatApp />
       </div>
       <p v-if="loadError">{{ loadError }}</p>
